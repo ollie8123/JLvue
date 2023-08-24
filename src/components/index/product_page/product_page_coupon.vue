@@ -1,4 +1,7 @@
 <template>
+<el-container v-if="sellerCouponList.length>0">      
+     <el-aside  style="padding: 10px; background-color: rgb(240, 240, 240); width: 20%">優惠券</el-aside>     
+        <el-main style="padding-top: 5px; background-color: rgb(247, 243, 238)">      
   <el-popover
     placement="bottom-start"
     title="優惠券列表"
@@ -13,27 +16,32 @@
         <span v-if="coupon.type=='rate'" >{{coupon.Discount*10}}折</span>
         <span v-else>折${{coupon.Discount}}</span>
          <span>低消${{coupon.minSpending}}</span>
+         <span>X{{coupon.perPersonQuota}}</span>
         <el-button v-if="userType=='notLogin'" class="elButton" color="#f9a751" @click="couponButton($event,coupon.id)">領取</el-button>
-        <el-button v-else-if="checkCoupon(coupon.id,coupon.perPersonQuota)" class="elButton" color="#f9a751" @click="couponButton($event,coupon.id)">領取</el-button>
+        <el-button v-else-if="checkCoupon(coupon.id)" class="elButton" color="#f9a751" @click="couponButton($event,coupon.id)">領取</el-button>
         <el-button v-else class="elButton" color="#f9a751" disabled>已領取</el-button>
       </div>
     </template>
+    
     <div  class="text item">使用時間:</div>
     <div  class="text item">{{newDate(coupon.startTime)}} ~ {{newDate(coupon.endTime)}}</div>
   </el-card>
   </ul>
     <template #reference >  
-        <span>
-             <el-button  v-for="(coupon,index) in sellerCouponList" :key="index" type="warning" disabled color="#ff4000">
+        <div>
+           <el-button  v-for="(coupon,index) in sellerCouponList" :key="index" type="warning" disabled color="#ff4000">
                   <span v-if="coupon.type=='rate'" >{{coupon.Discount*10}}折</span>
                   <span v-else>折${{coupon.Discount}}</span>
             </el-button>
-        </span>
+        </div>
     </template>
-  </el-popover>
+     </el-popover>
+     </el-main>
+  </el-container>
+
 </template>
 <script setup>
-import { ElPopover, ElButton,ElCard,ElNotification } from "element-plus";
+import { ElPopover, ElButton,ElCard,ElNotification,ElMain,ElAside,ElContainer } from "element-plus";
 import { ref, onMounted } from 'vue'
 import { CookieAxios } from "../../../service/api";
 import router from "../../../router";
@@ -43,12 +51,13 @@ const sellerCouponList = ref(['']);
 const userCouponList = ref({});
 const userType = ref();
 
-const checkCoupon = (id, perPersonQuota) => { 
-  if (userCouponList.value[id] >= perPersonQuota) {
-    return false;
-  } else { 
-    return true;
+const checkCoupon = (id) => { 
+  for (let i = 0; i < userCouponList.value.length; i++) { 
+    if (userCouponList.value[i] == id) {
+       return false;
+    }
   }
+    return true;
 }
 onMounted(() => { 
 getUserAndSellerCouponList()

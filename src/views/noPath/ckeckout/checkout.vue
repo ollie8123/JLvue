@@ -1,13 +1,18 @@
 <template>
-  <div>
-    <h1>結帳頁面</h1>
-  </div>
+    <navbar></navbar>
+
 </template>
 
-<script>
-export default {
+<script setup>
+import navbar from "../../../components/navbar/navbar.vue";
+import { ref, onMounted } from 'vue'
+import { useStore } from 'vuex';
+const store = useStore();
+onMounted(() => { 
 
-}
+console.log(store.getters.checkoutList[0])
+
+})
 </script>
 
 <style>

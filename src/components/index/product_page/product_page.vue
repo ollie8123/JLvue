@@ -21,16 +21,9 @@
                  <span v-else>{{ `$`+priceScope.min+` ~ $`+priceScope.max}}</span>
           </el-main>
          </el-container>
-
-
-          <el-container>
-           <el-aside style="padding: 10px; background-color: rgb(240, 240, 240); width: 20%">優惠券</el-aside>
-           <el-main style="padding: 10px; background-color: rgb(247, 243, 238)">     
-              <product_page_coupon :ProductPageId="ProductPageId"></product_page_coupon>
-          </el-main>
-         </el-container>
-
-
+         <!--優惠券-->
+        <product_page_coupon :ProductPageId="ProductPageId"></product_page_coupon>
+          
         <el-container v-if="specificationsMainName!=''">
            <el-aside style="padding: 10px; background-color: rgb(240, 240, 240); width: 20%">{{specificationsMainName}}</el-aside>
            <el-main style="padding: 10px; background-color: rgb(247, 243, 238)">
@@ -74,8 +67,6 @@
                <el-button style="margin-left: 20%;" class="elButton" color="#f9a751" @click="addCart" plain>加入購物車</el-button>
                <el-button class="elButton" color="#f9a751" plain>直接購買</el-button>
        </el-main>
-    
-
           </el-main>
         </el-container>
   </div>
@@ -89,6 +80,8 @@ import "element-plus/dist/index.css";
 import product_page_photo from './product_page_photo.vue';
 import product_page_coupon from "./product_page_coupon.vue";
 import { ref, onMounted, watch } from "vue";
+import { useStore } from 'vuex';
+const store = useStore();
 const props = defineProps(["ProductPageId"]);
 const productPage = ref([])
 const priceScope = ref({ max:'',min:''})
@@ -192,14 +185,16 @@ const secondDisabled = (id) => {
 
 //加入購物車
 const addCart = async () => {
+  if (constNum.value == null) { 
+    constNum.value = 0;
+    return;
+  }
    const cartMsg = {
   productPageId: Number(props.ProductPageId),
   count: constNum.value,
   mainId: 0,
   secondId:0
   };
- 
-
   // if () {
   //   判斷購物車是否有商品，如果有加上數量超過庫存則失敗
   // }
@@ -220,6 +215,7 @@ const addCart = async () => {
   }
 
   if (req.data.code === 1) {
+    await store.dispatch('getShoppingCart')
     successMsgTimer(req.data.msg, 1000)
   } else if (req.data.code === 0) { 
     errorsMsgTimer(req.data.msg, 1000)
@@ -229,7 +225,6 @@ const addCart = async () => {
 onMounted(() => {
   CookieAxios.get("/public/selectProduct?ProductPageId=" + props.ProductPageId).then(
     (req) => {
-
           productPage.value = req.data.data.productPage;
           priceScope.value.max = req.data.data.productPage.maxPrice;
           priceScope.value.min = req.data.data.productPage.minPrice;

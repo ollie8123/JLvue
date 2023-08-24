@@ -2,7 +2,9 @@
   <div class="container">
     <HomePageNavBar class="fixed-navbar"></HomePageNavBar>
     <div class="divBody">
+      <AdvertiseBar></AdvertiseBar>
       <RouterView></RouterView>
+     
 
     </div>
    
@@ -14,6 +16,7 @@
 <script setup>
 import HomePageNavBar from "../../components/navbar/HomePageNavBar.vue";
 import Footer from "../../components/noPath/footer/Footer.vue";
+import AdvertiseBar from "../../components/noPath/advertise/AdvertiseBar.vue";
 
 </script>
 
