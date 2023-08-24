@@ -1,0 +1,34 @@
+{
+  "name": "jingling",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
+    "@vee-validate/i18n": "^4.11.1",
+    "@vee-validate/rules": "^4.11.1",
+    "@vueup/vue-quill": "^1.2.0",
+    "axios": "^1.4.0",
+    "bootstrap": "^5.3.1",
+    "bootstrap-icons": "^1.10.5",
+    "element-plus": "^2.3.8",
+    "jwt-decode": "^3.1.2",
+    "sweetalert2": "^11.7.27",
+    "vee-validate": "^4.11.1",
+    "vue": "^3.3.4",
+    "vue-axios": "^3.5.2",
+    "vue-i18n": "^9.2.2",
+    "vue-router": "^4.2.4",
+    "vue-sweetalert2": "^5.0.5",
+    "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "vite": "^4.4.8",
+    "vue3-google-login": "^2.0.18"
+  }
+}
