@@ -22,10 +22,9 @@
 
 
                 </li>
-                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded " href="#about">
-                    <i class="bi bi-cart cartIcon"></i></a></li>
+                <li class="nav-item mx-0 mx-lg-1"><shoppingCart class="shoppingCartBtn"></shoppingCart></li>
                 <li class="nav-item mx-0 mx-lg-1"><button class="btn btn-dark sellerBtn" @click.prevent="beSeller">賣家中心</button></li>
-                <li class="nav-item mx-0 mx-lg-1 "><button class="btn btn-warning" @click.prevent="logout">Logout</button></li>
+                <li class="nav-item mx-0 mx-lg-1 "><button class="btn btn-warning logoutBtn" @click.prevent="logout">Logout</button></li>
             </ul>
         </div>
     </div>
@@ -37,6 +36,7 @@
 import { ref,reactive , onMounted } from 'vue';
 import { CookieAxios } from '../../service/api';
 import { useRouter, useRoute } from "vue-router";
+import shoppingCart from '../noPath/shoppingCart/shoppingCart.vue';
 const router = useRouter();
 const route = useRoute();
 const isLoggedIn = localStorage.getItem("loggedIn") == "true";
@@ -68,10 +68,12 @@ const beSeller = ()=>{
 const userPhotoURL = `${import.meta.env.VITE_API_JAVAURL}userPhoto`;
 const userAccountURL = `${import.meta.env.VITE_API_JAVAURL}findUserByEmail`;
 onMounted(async () => {
-alert(isLoggedIn)
+
 if (isLoggedIn) {
   try {
+
         const photoResponse = await CookieAxios.post(userPhotoURL);
+     
 
      
         if (photoResponse.data) {
@@ -166,5 +168,14 @@ if (isLoggedIn) {
 
 .sellerBtn{
     border: solid 1px white;
+    margin-left: 10px;
+}
+
+.logoutBtn{
+    margin-left: 10px;
+}
+
+.shoppingCartBtn{
+    margin: 0;
 }
 </style>

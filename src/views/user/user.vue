@@ -16,7 +16,8 @@
      <div class="col-6 d-flex flex-column mt-4 border-sides"
      v-if="$route.path !== '/user/account/payment' && 
            $route.path !== '/user/account/payment/CreateCreditcard' && 
-           $route.path !== '/user/account/address'">
+           $route.path !== '/user/account/address'&& 
+           $route.path !== '/user/userCoupon'">
         <div>
           <h3>我的檔案</h3>
           <span>管理你的檔案以保護你的帳戶</span>
@@ -43,11 +44,21 @@
     
 </div>
 
+<!-- 中右切換為coupon -->
+<div v-else-if="$route.path === '/user/userCoupon'" class="col-9 d-flex flex-column mt-4 border-sides">
+  <userCoupon></userCoupon>
+    
+</div>
+
+
+
       <!-- 區塊右 -->
       <div class="col-3 d-flex flex-column mt-4"
       v-if="$route.path !== '/user/account/payment' && 
            $route.path !== '/user/account/payment/CreateCreditcard' && 
-           $route.path !== '/user/account/address'">
+           $route.path !== '/user/account/address'&& 
+           $route.path !== '/user/userCoupon'">
+           
         <UserPhoto></UserPhoto>
       </div>
 
@@ -68,6 +79,7 @@ import payment from './account/payment/payment.vue';
 import CreateCreditcard from './account/payment/CreateCreditcard.vue';
 import Address from './account/address/address.vue';
 import Footer from '../../components/noPath/footer/Footer.vue';
+import userCoupon from '../../components/User/userCoupon.vue';
 
 
 </script>

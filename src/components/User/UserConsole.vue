@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div class="accordion " id="accordionExample">
+    <div  class="divArea">
+        <div class="accordion  " id="accordionExample">
 <!-- 會員頭像、帳號 -->
           <div class="d-flex mb-4 accountArea">
             <div>
@@ -34,22 +34,21 @@
 
 <!-- 購買清單 -->
   <div class="mb-3">
-    <h2 class="" id="headingTwo">
       <button class="accordion-button " type="button" >
         <i class="bi bi-card-list"></i> <RouterLink to="/seller/order">&nbsp;購買清單</RouterLink>
       </button>
-    </h2>
     
   </div>
 
 
 <!-- 我的優惠券 -->
 <div class=" mb-3">
-    <h2 class="" id="">
       <button class="accordion-button " type="button"  >
-        <i class="bi bi-ticket-perforated"></i><RouterLink to="/user/account/coupon">&nbsp;我的優惠券</RouterLink>
+        <i class="bi bi-ticket-perforated"></i>
+        <RouterLink to="/user/userCoupon">&nbsp;我的優惠券</RouterLink>
+     
+
       </button>
-    </h2>
     
   </div>
 
@@ -178,5 +177,14 @@ a {
 
 .userAccount .accountText{
   margin: 0;
+}
+
+.divArea{
+  background-color: white;
+  min-height: 99%;
+  padding-top: 15px;
+  border-radius: 10px;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2), 0px 3px 5px rgba(0, 0, 0, 0.1);
+  padding-left: 10px;
 }
 </style>

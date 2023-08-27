@@ -27,7 +27,7 @@
                 <img :src="image" alt="Description" class="round-image ">
                 <span class="dropdown-toggle-wrapper" data-bs-toggle="dropdown">
                 <a
-                class="nav-link dropdown-toggle text-dark"
+                class="nav-link dropdown-toggle text-dark accountText"
                 href="#"
                 id="navbarDropdown"
                 role="button"
@@ -116,8 +116,11 @@ const logout =  () => {
     onMounted(async () => {
             if (isLoggedIn) {
                      try {
+
             const photoResponse = await CookieAxios.post(userPhotoURL);
+             if (photoResponse.data) {
             image.value = `data:image/*;base64,${photoResponse.data}`;
+        }
 
             const userResponse = await CookieAxios.post(userAccountURL);
             if (userResponse.status === 200) {
@@ -228,6 +231,10 @@ const logout =  () => {
     .accountArea{
         border: solid 1px white;
         border-radius: 10px;
+        white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
     }
         
   .sellerBtn{
@@ -239,4 +246,6 @@ const logout =  () => {
     margin-left: 15px;
 
   }
+
+
     </style>

@@ -92,13 +92,18 @@ const router = createRouter({
       component: () => import("../views/noPath/register/SellerInfo.vue"),
     },
 
-  
     //User頁面
     {
       path: "/user",
       name: "user",
       component: () => import("../views/user/user.vue"),
       children: [
+        {
+          path: "userCoupon",
+          name: "userCoupon",
+          component: () =>
+            import("../views/user/userCoupon/userCoupon.vue"),
+        },
         {
           path: "account",
           name: "account",
@@ -144,11 +149,7 @@ const router = createRouter({
           component: () =>
             import("../views/user/notifications/notifications.vue"),
         },
-        {
-          path: "coupon",
-          name: "coupon",
-          component: () => import("../views/user/coupon/coupon.vue"),
-        },
+       
       ],
     },
     //seller頁面
@@ -172,7 +173,29 @@ const router = createRouter({
           name: "product",
           component: () => import("../views/seller/product/product.vue"),
         },
-       
+		  {
+			  path: 'coupon',
+			  name: 'coupon',
+			  component: () => import('../views/seller/coupon/coupon.vue'),
+			  children:[
+				  {
+					  path: 'find',
+					  name: 'find',
+					  component: () => import('../views/seller/coupon/couponFind.vue'),
+				  },
+				  {
+					  path: 'insert',
+					  name: 'insert',
+					  component: () => import('../views/seller/coupon/couponInsert.vue'),
+				  },
+				  {
+					  path: 'edit/:id',
+					  name: 'edit',
+					  component: () => import('../views/seller/coupon/couponEdit.vue'),
+				  },
+
+			  ]
+		  },
 
       ],
     },

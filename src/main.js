@@ -12,7 +12,9 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store  from'./store/storeIndex';
-
+//可能會爆炸
+import ElementPlus from "element-plus";
+import "element-plus/dist/index.css";
 
 defineRule('email', email);
 defineRule('required', required);
@@ -41,6 +43,8 @@ app.use(vue3GoogleLogin, {
 app.component('VForm', VForm);
 app.component('VField', VField);
 app.component('ErrorMessage', ErrorMessage);
+//可能會爆炸
+app.use(ElementPlus);
 app.use(i18n);
 app.use(store);
 app.use(router);

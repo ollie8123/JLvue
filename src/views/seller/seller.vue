@@ -6,12 +6,13 @@
       <RouterLink to="/seller/order">訂單管理</RouterLink>
       <RouterLink to="/seller/management">賣場管理</RouterLink>
       <RouterLink to="/seller/product">商品管理</RouterLink>
+      <RouterLink to="/seller/coupon/find">優惠券管理</RouterLink>
     </nav>
 
 
-    <div style="background-color: rgb(241, 150, 150); height: 300px; width: 300px;" >
+    <!-- <div style="background-color: rgb(241, 150, 150); height: 300px; width: 300px;" > -->
     <RouterView></RouterView>
-    </div>
+    <!-- </div> -->
 
    
   </div>
