@@ -3,6 +3,8 @@
     <HomePageNavBar class="fixed-navbar"></HomePageNavBar>
     <div class="divBody">
       <AdvertiseBar></AdvertiseBar>
+
+
       <RouterView></RouterView>
      
 
@@ -24,7 +26,7 @@ import AdvertiseBar from "../../components/noPath/advertise/AdvertiseBar.vue";
 .divBody {
   max-width: 1980px;
   font-weight: normal;
-  background-color: bisque;
+
   margin-top: 130px;
 
 }

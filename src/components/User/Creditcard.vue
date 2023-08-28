@@ -2,13 +2,14 @@
     <!-- 最外層 -->
     <div class="">
         <!-- title -->
-        <div class="d-flex justify-content-between mb-4">
+        <div class="d-flex justify-content-between mb-1 creditTitle">
 <div> <h3>信用卡</h3></div>
 <div ><button class="btn btn-dark justify-content-end" @click="goToAddCreditCard"><i class="bi bi-plus-lg m-1"></i>新增信用卡</button></div>
         </div>
         <hr>
 
          <!-- 信用卡 -->
+         <div class="creditBg">
 <div class="d-flex divSize " v-for="creditcard in creditcards.data" :key="creditcard.id" >
 
     <!-- 信用卡圖案 -->
@@ -27,7 +28,7 @@
 
 
 </div>
-
+</div>
 
        
     </div>
@@ -150,9 +151,13 @@ height: 50px;
 }
     
 .divSize{
-    height: 100px;
+    min-height: 100px;
     border-bottom: solid 3px white;
-    
+    background-color: white;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    margin-top: 10px;
 }
 
 hr{
@@ -161,6 +166,22 @@ hr{
 
 .cardType{
     width: 188px;
+}
+
+.creditTitle{
+  background-color: white;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+
+}
+
+.creditBg{
+  background-color: white;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    min-height: 666px;
 }
 
 

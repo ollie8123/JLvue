@@ -11,13 +11,13 @@
   </div>
   <div class="carousel-inner">
     <div class="carousel-item active" data-bs-interval="3000">
+      <img src="/image/advertise/open.png" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item" data-bs-interval="3000">
+      <img src="/image/advertise/data3.png" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item" data-bs-interval="3000">
       <img src="/image/advertise/data1.png" class="d-block w-100" alt="...">
-    </div>
-    <div class="carousel-item" data-bs-interval="3000">
-      <img src="https://cf.shopee.tw/file/tw-50009109-652af5f85e3e29b33c9670ac3ef0b83c_xxhdpi" class="d-block w-100" alt="...">
-    </div>
-    <div class="carousel-item" data-bs-interval="3000">
-      <img src="https://cf.shopee.tw/file/tw-50009109-7dc6fccb82e848f07961a0e36896c2ce_xxhdpi" class="d-block w-100" alt="...">
     </div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -39,7 +39,7 @@
                         <img src="/image/advertise/data2.png" alt="">
                     </div>
                     <div class="cm">
-                        <img src="https://cf.shopee.tw/file/tw-50009109-130e51f267cacb8151534c2fd1b5f5ce_xhdpi" alt="">
+                        <img src="/image/advertise/iphone.png" alt="">
                     </div>
                 </div>
                   <!-- 右邊小廣告結束 -->

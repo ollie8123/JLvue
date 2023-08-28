@@ -3,7 +3,7 @@
         <v-form class="" v-slot="{ errors }">
 
             <div class="">
-                <div class="mb-2 ">
+                <div class="mb-2 infoArea">
                     <table class="">
                         <tr class="">
 
@@ -220,6 +220,17 @@ onMounted(async () => {
     pointer-events: none; 
     background-color: #f5f5f5; 
 }
+
+
+.infoArea{
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    padding: 40px 20px;
+    min-height: 776px;
+
+}
+
 
 
 </style>

@@ -3,7 +3,7 @@
     <div>
 
         <!-- Title、新增按鈕 -->
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between titleArea">
             <div>
                 <h3>我的地址</h3>
             </div>
@@ -17,14 +17,15 @@
         <hr >
 
         <!-- 新增地址 -->
-        <div >
+        <div class="bigArea">
 
             <div class="mb-3"  >
                 <h3>地址</h3>
             </div>
 
-            <div class="addressArea" >
-                <div class="d-flex flex-column mb-5" v-for=" address in address.data" :key="address.id"  >
+            <div class="" >
+                <div class="addressArea">
+                <div class="d-flex flex-column mb-2 addressInfo" v-for=" address in address.data" :key="address.id"  >
 
                     <!-- 新增地址-姓名、電話、編輯 -->
                     <div class="d-flex justify-content-between"  >
@@ -64,8 +65,9 @@
                     </div>
 
                 </div>
-
+            </div>
                 <!-- 新增超商地址-地址 -->
+                <hr>
 
                 <div class="convenienceStore">
                     <!-- 新增超商地址-Title-->
@@ -73,7 +75,8 @@
                         <h3>超商取貨地址</h3>
                     </div>
                     <!-- d1-->
-                    <div v-for=" storeAddress in storeAddress.data" :key="storeAddress.id">
+                    <div class="storeArea">
+                    <div v-for=" storeAddress in storeAddress.data" :key="storeAddress.id" class="addressInfo mb-2">
                         <div class="d-flex flex-column mb-5">
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex mb-2">
@@ -98,7 +101,7 @@
 
                         </div>
                     </div>
-
+                </div>
 
 
 
@@ -692,7 +695,6 @@ hr {
 
 .convenienceStore {
     border-top: solid 4px white;
-    padding-top: 20px;
 }
 
 .addressType {
@@ -768,7 +770,6 @@ hr {
 .menu-header {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid #ddd;
 }
 
 .menu-title {
@@ -837,5 +838,36 @@ hr {
     color:grey ;
 }
 
+.titleArea{
+    background-color: white;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+
+}
+
+.bigArea{
+    background-color: white;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    min-height: 666px;
+}
+
+.addressArea{
+    min-height: 250px;
+}
+
+.storeArea{
+    min-height: 250px;
+
+}
+
+.addressInfo{
+    background-color: white;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+}
 
 </style>

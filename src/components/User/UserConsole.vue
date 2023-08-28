@@ -35,7 +35,7 @@
 <!-- 購買清單 -->
   <div class="mb-3">
       <button class="accordion-button " type="button" >
-        <i class="bi bi-card-list"></i> <RouterLink to="/seller/order">&nbsp;購買清單</RouterLink>
+        <i class="bi bi-card-list"></i> <RouterLink to="/user/orderList">&nbsp;購買清單</RouterLink>
       </button>
     
   </div>

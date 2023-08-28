@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div >
 
-        <div class="d-flex flex-column ">
+        <div class="d-flex flex-column myPhoto">
 
             <div class="image-container d-flex align-items-center justify-content-center mt-5">
                 <img :src="image"  alt="Description" class="round-image ">
@@ -175,5 +175,13 @@ onMounted(async () => {
     color: rgba(85, 85, 85, .8);
 }
 
+.myPhoto{
+  background-color: white;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    min-height: 905px;
+
+}
 
 </style>

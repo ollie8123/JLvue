@@ -17,12 +17,15 @@
      v-if="$route.path !== '/user/account/payment' && 
            $route.path !== '/user/account/payment/CreateCreditcard' && 
            $route.path !== '/user/account/address'&& 
-           $route.path !== '/user/userCoupon'">
+           $route.path !== '/user/userCoupon'&&
+           $route.path !== '/user/orderList'">
         <div>
+          <div class="myProfile">
           <h3>我的檔案</h3>
           <span>管理你的檔案以保護你的帳戶</span>
+        </div>
           <hr>
-          <div class="mt-5">
+          <div class="infoArea">
             <UserInfo></UserInfo>
           </div>
         </div>
@@ -50,6 +53,11 @@
     
 </div>
 
+<!-- 中右切換為OrderList -->
+<div v-else-if="$route.path === '/user/orderList'" class="col-9 d-flex flex-column mt-4 border-sides">
+  <OrderList></OrderList>
+</div>
+
 
 
       <!-- 區塊右 -->
@@ -57,7 +65,8 @@
       v-if="$route.path !== '/user/account/payment' && 
            $route.path !== '/user/account/payment/CreateCreditcard' && 
            $route.path !== '/user/account/address'&& 
-           $route.path !== '/user/userCoupon'">
+           $route.path !== '/user/userCoupon'&& 
+           $route.path !== '/user/orderList'">
            
         <UserPhoto></UserPhoto>
       </div>
@@ -80,6 +89,7 @@ import CreateCreditcard from './account/payment/CreateCreditcard.vue';
 import Address from './account/address/address.vue';
 import Footer from '../../components/noPath/footer/Footer.vue';
 import userCoupon from '../../components/User/userCoupon.vue';
+import OrderList from '../../components/User/OrderList.vue';
 
 
 </script>
@@ -109,6 +119,12 @@ hr{
   color:gray;
 }
 
+.myProfile{
+  background-color: white;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
 
+}
 
 </style>
