@@ -1,7 +1,7 @@
 <template>
 	<transition-group name="img-container-fade">
 		<div
-			:key="imgNum"
+			:key="img"
 			v-for="(img, imgNum) in imgs"
 			class="img-container"
 		>
@@ -59,9 +59,32 @@
 			請勿輸入五個以上的圖片!!
 		</span>
 	</div>
+	<div @click="testPhotoUpload()">test</div>
 </template>
 <script setup>
 import { ref, watchEffect } from 'vue';
+
+import { CookieAxios } from '@/service/api.js';
+
+const productManageAPIUrl = `${import.meta.env.VITE_API_JAVAURL}test`;
+
+const testPhotoUpload = async () => {
+	console.log('start');
+	console.log(pictureInput.value.files);
+	const formData = new FormData();
+	for (let data of pictureInput.value.files) {
+		formData.append('productPageImgs', data);
+	}
+	const response = await CookieAxios({
+		headers: {
+			'Content-Type': 'multipart/form-data',
+		},
+		method: 'POST',
+		url: productManageAPIUrl + '/photoUpload',
+		data: formData,
+	});
+	console.log(response.data.msg);
+};
 
 const pictureInput = ref();
 const imgs = ref([]);
@@ -152,6 +175,10 @@ const deleteImg = (imgNum) => {
 .img-container-fade-leave-active,
 .img-container-fade-move {
 	transition: all 0.5s;
+}
+
+.img-container-fade-leave-active {
+	position: absolute;
 }
 
 .img-container-fade-enter-from {

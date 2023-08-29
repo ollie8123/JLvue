@@ -49,21 +49,11 @@
            
         </td>
         <td>{{ coupon.miniumSpendingAmount }}元</td>
-        <td v-if="status===1||status===3">
-          <RouterLink
-            class="btn btn-secondary me-3"
-            :to="'/seller/coupon/edit/'+coupon.id"
-            ><i class="bi bi-pencil-fill"></i> 修改</RouterLink
-          >
-          <button class="btn btn-danger" @click="deleteCoupon(coupon.id)">
-            <i class="bi bi-trash-fill"></i> 刪除
-          </button>
-        </td>
-        <td v-if="status===2">
-          <button class="bi bi-pencil-fill" >更多</button>
-          <el-button  @click="findMore(coupon.id)">
+        <td >
+        
+          <button class="btn btn-primary" @click="findMore(coupon.id)"><i class="bi bi-search"></i>
            查看更多
-          </el-button>
+          </button>
         </td>
         
       </tr>
@@ -72,30 +62,99 @@
   <Paging :totalPages="totalPages" :thePage="datas.start + 1" @childClick="clickHandler"></Paging>
   
   <!-- singleCoupon.name.is?'':singleCoupon.name -->
-  <el-dialog v-model="dialogTableVisible" :title="singleCoupon.name" width="30%" center>
-    <div>
-    優惠券代碼:{{ singleCoupon.code}}
-    <br>  
-    開始時間:{{ singleCoupon.startTime}}
-    <br>
-    結束時間:{{ singleCoupon.endTime}}
-    <br>
-    折扣內容:{{ singleCoupon.discountRate}}
-    <br>
-    最低消費:{{ singleCoupon.miniumSpendingAmount}}
-    <br>
-    每人配額:{{ singleCoupon.perPersonQuota}}
-    <br>
-    已領取數:{{ singleCoupon.received}}
-    <br>
-    已使用數:{{ singleCoupon.used}}
-    <br>
-    剩餘可使用數量:{{ singleCoupon.availableNumber}}
-    <br>
-    建立時間:{{ singleCoupon.dataCreateTime}}
-    <br>
-    更新時間:{{ singleCoupon.dataUpdateTime}}
-  </div>
+  <el-dialog v-model="dialogTableVisible" width="600px" center >
+    <fieldset>
+   <header >{{singleCoupon.name}}</header>
+      <legend> 上一次更新時間: {{ singleCoupon.dataUpdateTime }}</legend>
+         <ol>
+           <li>
+             <label for="name">優惠券代碼:</label>
+             <input id="name" name="name" type="text" class="fildform" v-model="singleCoupon.code"/>
+           </li>
+           <li>
+             <label for="email">開始時間:</label>
+             <input
+          type="datetime-local"
+          id="begin"
+          :min="currentTime"
+          v-model="singleCoupon.startTime"
+          @change="updateEndTime"
+        />
+           </li>
+           <li>
+             <label for="phone">結束時間:</label>
+             <input
+          type="datetime-local"
+          id="end"
+          :min="startTimeOneHourLater"
+          v-model="singleCoupon.endTime"
+          
+        />
+           </li>
+           <div v-if="singleCoupon.discountAmount!=null&&singleCoupon.discountAmount!=''">
+             <li>
+               <label for="phone">折扣內容:</label>
+               <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.discountAmount"/>
+             </li>
+           </div>
+           
+           <div v-if="singleCoupon.discountRate!=null&&singleCoupon.discountRate!=''">
+            <li>
+                <label for="phone">折扣內容:</label>
+                <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.discountRate"/>
+            </li>
+            <li>
+                <label for="phone">最高折抵金額:</label>
+                <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.discountMaximum"/>
+            </li>
+
+           </div>
+           <li>
+             <label for="phone">最低消費:</label>
+             <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.miniumSpendingAmount"/>
+           </li>
+           <li>
+             <label for="phone">每人配額:</label>
+             <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.perPersonQuota"/>
+           </li>
+           <li>
+             <label for="phone">已領取數:</label>
+             <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.received"/>
+           </li>
+           <li>
+             <label for="phone">已使用數:</label>
+             <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.used"/>
+           </li>
+           <li>
+             <label for="phone">剩餘可使用數量:</label>
+             <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.availableNumber"/>
+           </li>
+           <li>
+             <label for="phone">建立時間:</label>
+             <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.dataCreateTime"/>
+           </li>
+           <div v-if="status!=2" class="bttn">
+           
+
+            <!-- <RouterLink
+            class="btn btn-secondary me-3"
+            :to="'/seller/coupon/edit/'+singleCoupon.id"
+            ><i class="bi bi-pencil-fill"></i> 修改</RouterLink> -->
+          <button   class="btn btn-secondary me-3" @click="edit()">
+            <i class="bi bi-pencil-fill"></i> 修改
+          </button>
+
+          <button  v-if="singleCoupon.received ===0" class="btn btn-danger" @click="deleteCoupon(singleCoupon.id)">
+            <i class="bi bi-trash-fill"></i> 刪除
+          </button>
+          <button  v-if="singleCoupon.received !==0 && singleCoupon.availableNumber!==0" class="btn btn-danger" @click="stop()">
+            <i class="bi bi-trash-fill"></i> 下架
+          </button>
+           </div>
+           
+           
+          </ol>
+   </fieldset>
   </el-dialog>
 </div>
 
@@ -104,9 +163,10 @@
 <script setup>
 import dayjs from 'dayjs';
 import { ref, reactive} from "vue";
-import { axios, CookieAxios } from "../../../service/api";
+import { CookieAxios } from "../../../service/api";
 import PageSize from '../../../components/page/PageSize.vue'
 import Paging from '../../../components/page/Paging.vue'
+import Swal from 'sweetalert2'
 const coupons = ref([]);
 const totalPages = ref(0);
 const datas = reactive({
@@ -227,8 +287,7 @@ const changeHandler = value => {
 }
 
 const deleteCoupon =async (couponId)=>{
-  console.log("id是:")
-  console.log(couponId)
+
   if(window.confirm("真的要刪除嗎?")){
 
     const API_URL=`deleteById/${couponId}`
@@ -256,11 +315,147 @@ const deleteCoupon =async (couponId)=>{
   }
   
 }
+const edit = async () => {
+  Swal.fire({
+  title: '確定要修改嗎?',
+  // text: "部分內容可以之後再修改!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: '確認',
+  cancelButtonText: '取消'
+
+}).then(async(result) => {
+  if (result.isConfirmed) {
+  const API_URL = `edit`;
+  coupons.value.dataUpdateTime=null;
+  singleCoupon.value.startTime=new Date(new Date(singleCoupon.value.startTime).getTime() + 8 * 60 * 60 * 1000).toISOString().slice(0, 16)
+  singleCoupon.value.endTime=new Date(new Date(singleCoupon.value.endTime).getTime() + 8 * 60 * 60 * 1000).toISOString().slice(0, 16)
+  const response = await CookieAxios.post(API_URL, singleCoupon.value);
+  if (response.data.code === 1) {
+    Swal.fire(
+      '修改成功!',
+      '',
+      'success'
+    )
+    loadValidity();
+    dialogTableVisible.value=false
+    
+  } else {
+    Swal.fire(
+      '修改失敗!',
+      '請重新嘗試',
+      'error'
+    )
+  }
+  }
+})
+ 
+}
+
+const stop = async () => {
+  Swal.fire({
+  title: '確定要下架嗎?',
+  text: "可以在發完重新上架!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: '確認',
+  cancelButtonText: '取消'
+
+}).then(async(result) => {
+  if (result.isConfirmed) {
+  const API_URL = `stop`;
+  coupons.value.dataUpdateTime=null;
+  singleCoupon.value.startTime=new Date(new Date(singleCoupon.value.startTime).getTime() + 8 * 60 * 60 * 1000).toISOString().slice(0, 16)
+  singleCoupon.value.endTime=new Date(new Date(singleCoupon.value.endTime).getTime() + 8 * 60 * 60 * 1000).toISOString().slice(0, 16)
+  const response = await CookieAxios.post(API_URL, singleCoupon.value);
+  if (response.data.code === 1) {
+    Swal.fire(
+      '修改成功!',
+      '',
+      'success'
+    )
+    loadValidity();
+    dialogTableVisible.value=false
+    
+  } else {
+    Swal.fire(
+      '修改失敗!',
+      '請重新嘗試',
+      'error'
+    )
+  }
+  }
+})
+ 
+}
 </script>
 
 <style scoped>
 tr:hover {
   background-color: lightblue;
   /* 其他樣式設定 */
+}
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+fieldset {
+	margin: 0 0 0 0;
+	padding: 0;
+  border: 1px solid #CCC;
+}
+legend {
+	justify-content: center;
+  display: flex;
+	color: gray;
+  font-weight: bold;
+  font-size: 20px;
+}
+label {
+	float: left;
+	width: 10em;
+	margin:auto;
+  padding: auto;
+}
+fieldset ol {
+	list-style: none;
+	padding-top: 3px;
+	padding-left: 16px;
+  padding-right: 16px;
+	padding-bottom: 3px;
+}
+fieldset li {
+	line-height: 24px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+  justify-content: center;
+  display: flex;
+  
+}
+fieldset li input.fildform{
+	line-height: 24px;
+	height: 24px;
+	border: 1px solid #CCC;
+  width: 199px;
+}
+fieldset .submit {
+	border-style: none;
+}
+header{
+  font-size: 50px;
+  color: lightblue;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+}
+.bttn{
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
 }
 </style>

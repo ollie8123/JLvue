@@ -17,7 +17,7 @@
     "bootstrap-icons": "^1.10.5",
     "default": "^0.1.1",
     "dayjs": "^1.11.9",
-    "element-plus": "^2.3.8",
+    "element-plus": "^2.3.9",
     "jwt-decode": "^3.1.2",
     "sweetalert2": "^11.7.27",
     "vee-validate": "^4.11.1",

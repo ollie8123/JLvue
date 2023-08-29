@@ -11,7 +11,7 @@
     <button class="btn btn-secondary position-absolute right-btn" @click="selectButton()"
     ><i class="bi bi-search"></i></button>
     </div>
-    <div class="mt-2">
+    <div class="mt-2 links-container">
         <a 
             v-for="item in vvvv" 
             :key="item.id" 
@@ -73,7 +73,7 @@ const vvvv = [
     url: "https://shopee.tw/search?keyword=湯姆熊金幣",
   },
   { id: 12, name: "拖鞋", url: "https://shopee.tw/search?keyword=拖鞋" },
-  { id: 13, name: "精靈", url: "https://shopee.tw/search?keyword=精靈" },
+  // { id: 13, name: "精靈", url: "https://shopee.tw/search?keyword=精靈" },
 ];
 
 const links = ref<LinkItem[]>([]);
@@ -113,8 +113,16 @@ const selectButton = () => {
     
 <style>
 
+.searchDiv {
+    align-items: center;
+    position: relative;  /* 设置为relative以便right-btn可以相对于此元素进行定位 */
+    max-width: 650px;  /* 与.searchBar的最大宽度相匹配 */
+    width: 100%;
+}
+
 .searchBar{
-width: 700px;
+max-width: 650px;
+width: 100%;
 height: 40px;
 }
 
@@ -132,7 +140,7 @@ height: 40px;
 
 .right-btn {
     position: absolute;
-    right: 13%;
+    right: 5px;
     top: 52%;
     transform: translateY(-50%);  /* 使按鈕垂直居中 */
 }
@@ -142,6 +150,11 @@ a {
     color: white;        
     cursor: pointer;     
     margin-right: 23px;
+
+    
+
 }
+
+
     
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="cartDiv">
-  <el-button type="danger" style="margin-left: 16px" @click="drawer = true" class="bi bi-cart el-button--large">
+  <el-button type="danger" @click="drawer = true" class="bi bi-cart el-button--large">
       購物車
     </el-button>
 
@@ -55,7 +55,7 @@
                 style="width: 10%; background-color: #a798ed"
                 class="main"
               >
-                <span class="truncate">規格</span>
+                <span class="truncate">總計</span>
               </ElMain>
               <ElMain class="main">
                 <div style="width: 60px"></div>
@@ -198,12 +198,11 @@
                     <el-card class="box-card"  v-for="sellerCoupon in coupon.sellerCoupon" :key="sellerCoupon.couponId" style="width: 100%;">
                     <div v-if="coupon.bestCouponId==sellerCoupon.couponId" ><span style="font-size: 20px;color:#f08383;">最佳首選</span></div>
                       <el-row>    
-                          <el-col :span="23">
+                          <el-col :span="18">
                             <div v-if="sellerCoupon.type=='rate'" >
                             <div style="font-size: 20px;">{{ sellerCoupon.discountRate*10 }}折</div>    
                             <div>低消:{{sellerCoupon.miniumSpendingAmoun}} 最高折抵:{{sellerCoupon.discountMaximum}}</div>
                             <div>有效日期:{{newDate(sellerCoupon.endTime)}}</div>
-
                           </div>
                           <div v-else-if="sellerCoupon.type=='amount'" >
                             <span style="font-size: 20px;">折${{sellerCoupon.discountAmount}}</span>
@@ -211,10 +210,15 @@
                             <div>有效日期:{{newDate(sellerCoupon.endTime)}}</div>
                           </div>
                           </el-col>
-                              <el-col :span="1">
+                           <el-col :span="6">
                         <el-checkbox-group v-model="selectCoupon">
+                          <!--如果使用者優惠券中有此優惠券且數量大於0-->
+                          <ElButton v-if="couponType(sellerCoupon.couponId,coupon.sellerId)=='沒領過'" @click="addCoupon(sellerCoupon.couponId)">領取</ElButton>
+                          <ElButton v-else-if="couponType(sellerCoupon.couponId,coupon.sellerId)=='領過用光'" :disabled=true >已達上限</ElButton>
                         <el-checkbox
-                          :label="{id: sellerCoupon.couponId, sellerId: coupon.sellerId}"
+                          v-else-if="couponType(sellerCoupon.couponId,coupon.sellerId)=='領過沒用光'"
+                          :label="{id: sellerCoupon.couponId, sellerId: coupon.sellerId,sellerCoupon:sellerCoupon}"
+                           :disabled="checkBoxControl(sellerCoupon.couponId,sellerCoupon.miniumSpendingAmoun,sellerPrice(coupon.sellerId))"
                           size="large"
                           >{{
                         }}</el-checkbox>
@@ -224,20 +228,13 @@
                       </el-card>
                      </ul>
                       <template #reference>
-                        <el-button class="m-2">優惠券</el-button>
+                        <el-button class="m-2" v-if="coupon.sellerCoupon.length>0">優惠券</el-button>
                       </template>
                     </el-popover>
                     <!-- 判斷有沒有選擇優惠券 -->
-                     <span>{{ selectSellerCoupon(coupon.sellerId)}}</span>
+                     <span  v-if="coupon.sellerCoupon.length>0">{{ selectSellerCoupon(coupon.sellerId)}}</span>
+                     <span  v-else>暫無可用優惠券</span>
                     <!-- //////////////////-->
-                    <div
-                      v-for="sellerCoupon in coupon.sellerCoupon"
-                      :key="sellerCoupon.couponId"
-                    >
-                      {{ sellerCoupon }}
-                    </div>
-                    <div>最好的{{ coupon.bestCouponId }}</div>
-                    <div>{{ coupon }}</div>
                   </el-card>
                 </el-col>
               </el-row>
@@ -258,7 +255,7 @@
                 >全選</el-checkbox
               ></el-col
             >
-            <el-col :span="6"></el-col>
+            <el-col :span="6"><span>折扣{{discount()}}</span></el-col>
             <el-col :span="5"
               ><span style="font-size: 22px"
                 >{{ selectedProducts.length }}項商品</span
@@ -266,7 +263,7 @@
             >
             <el-col :span="5"
               ><span style="font-size: 22px"
-                >總金額:{{ `$` + selectPruductPrice() }}</span
+                >總金額$:{{new Intl.NumberFormat().format(selectPruductPrice()-discount())}}</span
               ></el-col
             >
             <el-col :span="5"
@@ -297,7 +294,7 @@ import {
   ElInputNumber,
   ElCol,
   ElPopover,
-
+  ElNotification,
 } from "element-plus";
 import { ref, onMounted, watch } from "vue";
 import { CookieAxios } from "../../../service/api";
@@ -314,32 +311,8 @@ onMounted(() => {
     store.dispatch("getShoppingCart");
   }
 });
-const aa = ref('');
-//判斷是否有選擇
-const selectSellerCoupon = (sellerId) => { 
-  for (let i = 0; i < selectCoupon.value.length; i++) { 
-    if (selectCoupon.value[i].id == sellerId) {
-     console.log('aaaaaaaaaaaaaaaaaaaaa')
-     console.log(sellerId)
-     console.log(  selectCoupon.value[i].id)
-    }
-  }
 
-}
-//存放優惠券
-const selectCoupon=ref([[]]) 
-watch(selectCoupon, (newSelectCoupon, oldSelectCoupon) => {
-  // 對於新選擇的每一個項目
-  newSelectCoupon.forEach((newCoupon, newIndex) => {
-    // 檢查是否存在相同的 sellerId
-    const existingIndex = oldSelectCoupon.findIndex(oldCoupon => oldCoupon.sellerId === newCoupon.sellerId)
-    if (existingIndex !== -1) {
-      // 如果存在，替換舊項目
-    selectCoupon.value.splice(existingIndex, 1)
-    }
-  })
-  console.log(selectCoupon.value);
-})
+
 //存放選取商品
 const selectedProducts = ref([]);
 //算選取商品總價
@@ -350,7 +323,7 @@ const selectPruductPrice = () => {
       selectedProducts.value[i].productPrice *
       selectedProducts.value[i].productCount;
   }
-  return new Intl.NumberFormat().format(price);
+  return price;
 };
 //結帳
 const checkout = () => {
@@ -383,18 +356,7 @@ watch(selectedProducts, (newVal) => {
   }
   test(selectedProducts.value);
 });
-//存放優惠券訊息
-const couponMsg = ref([]);
-//計算最佳優惠券(參數一)
-const test = async (arr) => {
-  let cartIds = new Array();
-  for (let i = 0; i < arr.length; i++) {
-    cartIds.push(arr[i].cartId);
-  }
-  const res = await CookieAxios.post("/ShoppingCartBestCoupon", { cartIds });
-  couponMsg.value = res.data.data;
-  console.log(couponMsg.value[0].sellerId);
-};
+
 //更改購物車
 const countChange = async (id, count) => {
   await store.dispatch("changeShoppingCartProductCount", { id, count });
@@ -406,6 +368,101 @@ const deleteCart = (id) => {
   arr.push(id);
   store.dispatch("deleteShoppingCart", { ids: arr });
 };
+//新增優惠券
+const addCoupon = async (couponId) => { 
+  const req = await CookieAxios.post('/addCoupon', null, { params: { couponId: couponId } });
+  if (req.data.msg == '領取成功') { 
+        ElNotification({
+          title: '領取成功',
+          position: 'bottom-right',
+          type:'success'
+       })
+   }
+  test(selectedProducts.value);
+}
+
+//存放優惠券訊息
+const couponMsg = ref([]);
+//計算最佳優惠券，獲取選取購物車的賣家優惠券資訊及最佳優惠券
+const test = async (arr) => {
+  let cartIds = new Array();
+  for (let i = 0; i < arr.length; i++) {
+    cartIds.push(arr[i].cartId);
+  }
+  const res = await CookieAxios.post("/ShoppingCartBestCoupon", { cartIds });
+  couponMsg.value = res.data.data;
+};
+//計算折扣金額
+const discount = () => { 
+  let total = 0;
+  if (selectCoupon.value.length > 0) { 
+  for (let i = 0; i < selectCoupon.value.length; i++) { 
+    let couponList = selectCoupon.value[i];
+    if (couponList.sellerCoupon.type == 'amount') { 
+      total += couponList.sellerCoupon.discountAmount;
+    } else {
+      if (sellerPrice(couponList.sellerId) - (sellerPrice(couponList.sellerId) * couponList.sellerCoupon.discountRate) > couponList.sellerCoupon.discountMaximum) {
+        total +=couponList.sellerCoupon.discountMaximum
+      } else { 
+        total +=(sellerPrice(couponList.sellerId)-(sellerPrice(couponList.sellerId) * couponList.sellerCoupon.discountRate))
+      }
+    }
+  }
+  }
+  return total;
+}
+//判斷是否有選擇優惠券
+const selectSellerCoupon = (sellerId) => { 
+  for (let i = 0; i < selectCoupon.value.length; i++) { 
+    let product=selectCoupon.value[i]
+    if (product.sellerId == sellerId) {
+      let sellerCoupon = product.sellerCoupon;
+      if (sellerCoupon.type == "rate") {
+        let price = (sellerPrice(sellerId) - (sellerPrice(sellerId) * sellerCoupon.discountRate)) > sellerCoupon.discountMaximum ? sellerCoupon.discountMaximum : (sellerPrice(sellerId) * sellerCoupon.discountRate);
+        return `${sellerCoupon.discountRate*10}折\t最高折抵${sellerCoupon.discountMaximum}\t以折扣:${price}`;
+      } else { 
+        return `折抵${sellerCoupon.discountAmount}`;
+      } 
+    }
+  }
+
+  return '請選擇';
+}
+//存放選取優惠券
+const selectCoupon=ref([]) 
+watch(selectCoupon, () => {
+    const lastIndex = selectCoupon.value.length - 1;
+    const lastCoupon = selectCoupon.value[lastIndex];
+    const existingIndex = selectCoupon.value.findIndex((coupon, idx) => coupon.sellerId === lastCoupon.sellerId && idx !== lastIndex);
+    if (existingIndex !== -1) {
+        selectCoupon.value.splice(existingIndex, 1);
+    }
+});
+//判斷優惠券顯示狀態(查看使用者是否有領取，有領取過是否還有數量)
+const couponType = (couponId, sellerId) => {
+  //所有賣家訊息
+  let msg = couponMsg.value;
+  for (let i = 0; i < msg.length; i++) { 
+    //找出賣家訊息陣列中為sellerId的
+    if (msg[i].sellerId == sellerId) {
+      //賣家優惠券陣列
+      let userCoupon = msg[i].userCoupon;
+      for (let j = 0; j < userCoupon.length; j++) { 
+        //檢查是否領過此優惠
+        if (userCoupon[j].couponId == couponId) { 
+              //檢查是否還有couponCount
+          if (userCoupon[j].couponCount>0) { 
+                return '領過沒用光';
+          } else {
+                return '領過用光';
+          }
+        }
+      }
+    }
+  }
+  return '沒領過';
+}
+
 //優惠券時間
 const newDate = (time) => { 
 let date = new Date(time); // 假設 coupon.startTime 是一個 Date 物件或類似的日期時間表示方式
@@ -416,6 +473,30 @@ let hours = date.getHours().toString().padStart(2, '0');
 let minutes = date.getMinutes().toString().padStart(2, '0');
 let seconds = date.getSeconds().toString().padStart(2, '0');
 return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+}
+//單賣家選取金額
+const sellerPrice = (sellerId) => { 
+let price = 0;
+  for (let i = 0; i < selectedProducts.value.length; i++) {
+    if (selectedProducts.value[i].sellerId == sellerId) { 
+     price +=
+      selectedProducts.value[i].productPrice *
+      selectedProducts.value[i].productCount;
+    }
+  }
+  return price;
+}
+//優惠券checkBox控制根據，單賣家選取金額判斷
+const checkBoxControl = (couponId, miniumSpendingAmoun,price) => { 
+  if (price >= miniumSpendingAmoun) {
+    return false;
+  } else {
+    const index = selectCoupon.value.findIndex(coupon => coupon.id === couponId);
+    if (index !== -1) {
+      selectCoupon.value.splice(index, 1);
+    }
+    return true;
+  }
 }
 </script>
 <style scoped>

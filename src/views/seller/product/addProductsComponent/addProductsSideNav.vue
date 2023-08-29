@@ -30,8 +30,16 @@ const cardList = ref({
 	otherInfo: '其他資訊',
 });
 </script>
-<style>
+<style scoped>
+
+.product-edit-sidebar {
+	height: 100%;
+	width: 240px;
+	color: rgb(55, 129, 194);
+	background-color: aliceblue;
+}
 .nav-link:hover {
 	color: rgb(34, 156, 34);
 }
+
 </style>

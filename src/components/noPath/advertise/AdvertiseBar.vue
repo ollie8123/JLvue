@@ -56,9 +56,6 @@
 </script>
     
 <style scoped>
-.bigFarm{
-    min-height: 500px;
-}
 
 .carousel-inner .carousel-item img {
     width: 796.664px !important;

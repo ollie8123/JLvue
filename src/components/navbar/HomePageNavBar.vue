@@ -3,14 +3,14 @@
     <nav id="mainNav" class="navbar navbar-light navbar-expand-lg bg-black text-uppercase ">
 <div class="d-flex w-100 justify-content-between ">
         <!-- 左 - LOGO開始 -->
-        <div class="logoDiv "><a class="navbar-brand " href="#page-top"><RouterLink to="/"><img src="/image/logo/navbarlogo.png" alt="" class="logo"></RouterLink></a><button class="navbar-toggler text-white bg-primary navbar-toggler-right text-uppercase rounded" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>    
+        <div class="logoDiv "><a class="navbar-brand " href="#page-top"><RouterLink to="/"><img src="/image/logo/navbarlogo.png" alt="" class="logo"></RouterLink></a>  
         </div>
         <!-- 左 - LOGO結束 -->
         
         <!-- 中 - SearchBar開始 -->
 
         <div class="searchDiv ">
-<SearchBar class="cartBtn"></SearchBar>
+<SearchBar></SearchBar>
             
 </div>
 
@@ -62,7 +62,7 @@
             </span>
             </li>
             <!-- 購物車 -->
-            <div>
+            <div class="sellerBtnDiv">
                 <RouterLink to="/seller"><div class="btn btn-outline-secondary sellerBtn">賣家中心</div></RouterLink>
                 
             </div>
@@ -164,6 +164,7 @@ const logout =  () => {
     .logoText a, .accountText a {
         text-decoration: none !important;
         color: inherit !important;
+
     }
 
     .logoText a:hover, .accountText a:hover,
@@ -219,7 +220,7 @@ const logout =  () => {
 
 
     .searchDiv{
-        width: 800px;
+        max-width: 800px;
        margin-top: 20px;
        margin-left: 180px;
     }
@@ -234,6 +235,7 @@ const logout =  () => {
         white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  min-width: 140px;
 
     }
         
@@ -244,6 +246,13 @@ const logout =  () => {
     height: 38px;
     margin-top: 7px;
     margin-left: 15px;
+
+  }
+
+  .sellerBtnDiv{
+    width: 97.672px;
+    height: 38px;
+    margin-right: 30px;
 
   }
 

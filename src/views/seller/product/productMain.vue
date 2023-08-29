@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView, useRoute } from 'vue-router';
+import { RouterView, useRoute } from 'vue-router';
 
 function getParentRouteName() {
 	const matchedRoutes = useRoute().matched; //回傳一個陣列，包含所有上層的路由資訊
@@ -24,18 +24,19 @@ function getParentRouteName() {
 	position: sticky;
 	top: 65px;
 	background-color: rgb(198, 227, 255);
-	z-index: 1;
+	z-index: 2;
 }
 .product-main-header h1 {
 	font-size: 30px;
 	margin: 0 30px;
 }
 .product-main-body {
-	min-height: 100vh;
+	position: relative;
+	height: calc(100vh - 101px);
 	/*測試用之後要砍*/
-	height: 9000px;
+	/* height: 9000px; */
 	width: 80%;
 	margin: auto;
-	background-color: rgb(215, 250, 245);
+	
 }
 </style>

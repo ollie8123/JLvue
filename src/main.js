@@ -6,8 +6,8 @@ import { email, required } from '@vee-validate/rules';
 import { createI18n } from 'vue-i18n';
 import { localize } from '@vee-validate/i18n'
 import zh_TW from './i18n/zh_TW'
-
 import vue3GoogleLogin from "vue3-google-login";
+
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
@@ -24,6 +24,7 @@ configure({
   generateMessage: localize('zh_TW'),
   validateOnInput: true,
 });
+
 
 
 const i18n = createI18n({

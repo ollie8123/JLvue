@@ -1,13 +1,19 @@
 <template>
 
 <div class="indexDiv">
+  <AdvertiseBar></AdvertiseBar>
+      <hotProducts></hotProducts>
   <IndexKindView></IndexKindView>
+  <top5SellerProduct></top5SellerProduct>
 </div>
 
 </template>
 
 <script setup>
 import IndexKindView from '../../components/index/IndexKindView.vue';
+import AdvertiseBar from "../../components/noPath/advertise/AdvertiseBar.vue";
+import hotProducts from "../../components/noPath/advertise/hotProducts/hotProducts.vue";
+import top5SellerProduct from '../../components/index/product_page/top5_seller_product.vue'
 </script>
 
 <style scoped>
@@ -28,6 +34,8 @@ nav a {
 }
 
 .indexDiv{
-  min-height: 2000px;
+  min-height: 800px;
 }
+
+
 </style>

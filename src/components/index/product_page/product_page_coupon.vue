@@ -18,7 +18,7 @@
          <span>低消${{coupon.minSpending}}</span>
          <span>X{{coupon.perPersonQuota}}</span>
         <el-button v-if="userType=='notLogin'" class="elButton" color="#f9a751" @click="couponButton($event,coupon.id)">領取</el-button>
-        <el-button v-else-if="checkCoupon(coupon.id)" class="elButton" color="#f9a751" @click="couponButton($event,coupon.id)">領取</el-button>
+        <el-button v-else-if="checkCoupon(coupon.id)" class="elButton" color="#f9a751" @click="couponButton(coupon.id)">領取</el-button>
         <el-button v-else class="elButton" color="#f9a751" disabled>已領取</el-button>
       </div>
     </template>
@@ -71,10 +71,7 @@ const res= await CookieAxios.get(`/public/SellerCoupon?productPageId=${props.Pro
   }
 })
 
-const couponButton = async (event, couponId) => { 
-      const rect = event.target.getBoundingClientRect();
-      alert(`ID: ${couponId}, X: ${rect.left}, Y: ${rect.top}`);
-  
+const couponButton = async (couponId) => { 
   if (userType.value != 'notLogin') {
     const req = await CookieAxios.post('/addCoupon', null, { params: { couponId: couponId } });
     console.log(req.data.msg)

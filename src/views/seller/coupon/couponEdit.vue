@@ -77,6 +77,7 @@
 import { ref, computed } from "vue";
 import { axios, CookieAxios } from "../../../service/api";
 import { useRoute, useRouter } from "vue-router";
+import Swal from 'sweetalert2'
 
 const $router = useRouter();
 const route =useRoute();
@@ -122,17 +123,41 @@ const clear = () => {
 };
 
 const edit = async () => {
-  const API_URL = `edit`;
+  Swal.fire({
+  title: '確定要修改嗎?',
+  // text: "部分內容可以之後再修改!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: '確認',
+  cancelButtonText: '取消'
+
+}).then(async(result) => {
+  if (result.isConfirmed) {
+    const API_URL = `edit`;
   coupons.value.dataUpdateTime=null;
   console.log('修改後coupon.value');
   console.log(coupons.value.miniumSpendingAmount);
   const response = await CookieAxios.post(API_URL, coupons.value);
   if (response.data.code === 1) {
-    alert("修改成功");
+    Swal.fire(
+      '修改成功!',
+      '',
+      'success'
+    )
     $router.push("/seller/coupon/find");
+    
   } else {
-    alert("修改失敗");
+    Swal.fire(
+      '修改失敗!',
+      '請重新嘗試',
+      'error'
+    )
   }
+  }
+})
+ 
 };
 
 </script>

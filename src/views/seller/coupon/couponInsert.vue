@@ -1,8 +1,21 @@
 <template>
-  <div class="123">
-    <div class="row">
-      <div class="">
-        <label for="id" class="form-label">優惠券名稱:</label>
+  <el-main>
+
+  
+  <div class="container" width="450px">
+    <fieldset  width="450px">
+      <legend> 新增優惠券</legend>
+         <ol>
+          <section
+					id="productPageInfo"
+					class="card"
+				>
+        <h3 margin-left="10px">
+          基本資料:
+        </h3>
+        <br>
+           <li>
+            <label for="id" class="form-label">優惠券名稱:</label>
         <el-input
           type="text"
           id="id"
@@ -10,13 +23,12 @@
           show-word-limit
           maxlength="40"
           placeholder="請輸入"
+          style="margin-right: 10px;"
         />
         <small>優惠券名稱不會向買家顯示</small>
-      </div>
-      <br />
-
-      <div class="">
-        <label for="code" class="form-label">優惠代碼: </label>
+           </li>
+           <li>
+            <label for="code" class="form-label">優惠代碼: </label>
         <el-input
           type="text"
           placeholder="請輸入"
@@ -26,64 +38,88 @@
           maxlength="5"
           show-word-limit
           @input="filterCode"
+          style="margin-right: 10px;"
         />
-      </div>
-      <div class="block">
-        <label for="begin" class="form-label">優惠券開始時間: </label>
-        <input
+           </li>
+           <li>
+            <label for="begin" class="form-label">優惠券開始時間: </label>
+            <input
           type="datetime-local"
           id="begin"
           :min="currentTime"
           v-model="startTime"
           @change="updateEndTime"
         />
-      </div>
-
-      <div class="">
-        <label for="end" class="form-label">結束時間: </label>
-        　<input
+           </li>
+           <li>
+            <label for="end" class="form-label">優惠券結束時間: </label>
+            <input
           type="datetime-local"
           id="end"
           :min="startTimeOneHourLater"
           v-model="endTime"
+          
         />
-      </div>
-<div>
-
-
-      折扣設定:
+           </li>
+           </section>
+           <section
+					id="productPageInfo"
+					class="card"
+				   >
+           <h3 margin-left="10px">
+          折扣內容:
+        </h3>
+           <li>
+            <label for="">折扣設定:</label>
+            
       <select v-model="discount" @change="clear">
         <option value="amount">折扣金額</option>
         <option value="ratio">折扣折數</option>
       </select>
+           </li>
+           <div v-if="discount === 'ratio'">
+            <li>
+             <label for="">折扣折數:</label>
+             <input type="number" v-model="discountRate" 
+             placeholder="請輸入"/>
+             
+             <small>  請輸入0~1兩位小數</small>
+           </li>
+           <li>
+             <label for="">最高折抵金額:</label>
+             <input type="number" v-model="discountMaximum"
+             placeholder="請輸入"/>
+           </li>
+           </div>
+           <li v-if="discount === 'amount'">
+             <label for="">折扣金額:</label> 
+          <input type="number" v-model="discountAmount" 
+          placeholder="請輸入"/> 
+           </li>
 
-      <div v-if="discount === 'amount'">
-        折扣金額: 
-        <input type="number" v-model="discountAmount" /> 
-        最低消費金額:
-        <input type="number" v-model="miniumSpendingAmount" /> 
-        每個買家最大配額:
-        <input type="number" v-model="perPersonQuota" />
-        可使用數量:
-        <input type="number" v-model="availableNumber">
-      </div>
-
-      <div v-if="discount === 'ratio'">
-        折扣折數:
-        <input type="number" v-model="discountRate" /> 
-        最高折抵金額:　
-        <input type="number" v-model="discountMaximum"/>
-        最低消費金額:
-        <input type="number" v-model="miniumSpendingAmount" />
-        每個買家最大配額:
-        <input type="number" v-model="perPersonQuota" />
-        可使用數量:
-        <input type="number" v-model="availableNumber">
-      </div>
-      <button @click="insert">新增</button>
+           <li>
+             <label for="">最低消費金額:</label>
+             
+        <input type="number" v-model="miniumSpendingAmount" 
+        placeholder="請輸入"/> 
+           </li>
+           <li>
+             <label for="phone">每人配額:</label>
+             <input type="number" v-model="perPersonQuota" placeholder="請輸入"/>
+           </li>
+           <li>
+             <label for="phone">可使用數量:</label>
+        <input type="number" v-model="availableNumber" placeholder="請輸入">
+           </li>
+           
+          </section>
+          <el-button class="btnInsert" type="primary" @click="insert" >新增</el-button>
+        </ol>
+          
+   </fieldset>
+    
 </div>
-</div>
-</div>
+</el-main>
 </template>
 
 <script setup>
@@ -208,31 +244,77 @@ const insert = async () => {
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-}
+
 small {
   color: gray;
 }
-.demo-datetime-picker {
-  display: flex;
-  width: 100%;
-  padding: 0;
-  flex-wrap: wrap;
+
+fieldset {
+	/* margin: 1.5em 0 0 1.5em;
+   */
+   margin: auto;
+	padding: 0;
+  border: 1px solid #CCC;
+  width: 800px;
+  justify-content: center;
 }
-.demo-datetime-picker .block {
-  padding: 30px 0;
-  text-align: center;
-  border-right: solid 1px var(--el-border-color);
-  flex: 1;
+legend {
+	margin-left: 1em;
+	color: #009;
+    font-weight: bold;
+    font-size: 40px;
+    display: flex;
 }
-.demo-datetime-picker .block:last-child {
-  border-right: none;
+label {
+	float: left;
+	width: 10em;
+	margin-right: 1em;
 }
-.demo-datetime-picker .demonstration {
-  display: block;
-  color: var(--el-text-color-secondary);
-  font-size: 14px;
-  margin-bottom: 20px;
+fieldset ol {
+	list-style: none;
+	padding-top: 3px;
+	padding-left: 2em;
+  padding-right: 2em;
+	padding-bottom: 1px;
 }
+fieldset li {
+	line-height: 24px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+  margin-left: 10px;
+}
+fieldset li input.fildform{
+	line-height: 24px;
+	height: 24px;
+	border: 1px solid #CCC;
+}
+fieldset .submit {
+	border-style: none;
+}
+.card {
+	scroll-margin-top: 110px;
+	margin: 1rem !important;
+	box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+	border-radius: var(--bs-border-radius) !important;
+  padding-right: 10px;
+}
+.cards-block {
+	height: 100%;
+	padding-bottom: 50px;
+}
+.li{
+  margin-left: 2px;
+}
+h3{
+  padding-top: 10px;
+  padding-left: 5px;
+}
+.btnInsert{
+ display: flex;
+ margin: auto;
+ text-align: center;
+ width: 80px;
+ height: 40px;
+}
+
 </style>
