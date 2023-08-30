@@ -5,22 +5,29 @@ import {successMsg ,errorMsg} from "../service/sweetalert2";
 export default createStore({
   state: {
     Cart: [],
-    checkoutList: [],
+    checkoutProductList: [],
+    checkoutCouponList: [],
   },
   getters: {
     Cart: (state) => {
       return state.Cart;
     },
-    checkoutList: (state) => {
-      return state.checkoutList;
+    checkoutProductList: (state) => {
+      return state.checkoutProductList;
+    },
+    checkoutCouponList: (state) => {
+      return state.checkoutCouponList;
     },
   },
   mutations: {
     setCartData(state, data) {
       state.Cart = data;
     },
-    setCheckoutList(state, data) {
-      state.checkoutList = data;
+    setCheckoutProductList(state, data) {
+      state.checkoutProductList = data;
+    },
+    setCheckoutCouponList(state, data) {
+      state.checkoutCouponList = data;
     },
   },
   actions: {
@@ -30,8 +37,11 @@ export default createStore({
     //       dispatch('consoleTest')
     //   });
     //   },
-    async getCheckoutList({ commit }, { checkoutList }) {
-        commit("setCheckoutList", checkoutList);
+    getCheckoutCouponList({ commit }, { checkoutCouponList }) {
+      commit("setCheckoutCouponList", checkoutCouponList);
+    },
+    getCheckoutProductList({ commit }, { checkoutProductList }) {
+      commit("setCheckoutProductList", checkoutProductList);
     },
     async getShoppingCart({ dispatch, commit }) {
       await CookieAxios.post("/selectUserShoppingCart").then((res) => {

@@ -7,9 +7,10 @@
       :key="productPage"
       :span="props.span"
     >
-      <el-card :body-style="{ padding: '0px' }" style=" margin-top: 5px;" @click="aa(productPage.id)">
+    
+      <el-card :body-style="{ padding: '0px' }" style=" margin-top: 5px;" @click="selectProduct(productPage.id,productPage.name)">
         <img
-          style="height: 250px; width: 250px;  object-fit: cover; object-position: center;"
+          style="height: 250px; width: auto;  object-position: center;object-fit: cover;"
           :src=productPage.photo
           class="image"
         />
@@ -32,13 +33,23 @@
 
 <script setup>
 import { ElRow,ElCol,ElCard,ElButton } from 'element-plus';
-import { ref} from 'vue'
+import { ref } from 'vue'
+import { useRouter } from "vue-router";
+const router = useRouter();
 const props=defineProps(['top5List',"span"])
 
-const aa = (productPageId) => { 
-  console.log(productPageId);
-}
-
+const selectProduct = (PageId, PageName) => {
+  if (PageId != undefined) {
+    router.push({
+      path: "/product_page",
+      query: { pd: PageName + Math.random() + "-" + PageId },
+    });
+    window.scrollTo(0, 0);
+  } else { 
+    router.push('/')
+  }
+ 
+};
 </script>
 
 

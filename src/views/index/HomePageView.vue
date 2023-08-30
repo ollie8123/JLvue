@@ -4,7 +4,8 @@
   <AdvertiseBar></AdvertiseBar>
       <hotProducts></hotProducts>
   <IndexKindView></IndexKindView>
-  <top5SellerProduct></top5SellerProduct>
+  <hProductList></hProductList>
+  
 </div>
 
 </template>
@@ -12,8 +13,8 @@
 <script setup>
 import IndexKindView from '../../components/index/IndexKindView.vue';
 import AdvertiseBar from "../../components/noPath/advertise/AdvertiseBar.vue";
-import hotProducts from "../../components/noPath/advertise/hotProducts/hotProducts.vue";
-import top5SellerProduct from '../../components/index/product_page/top5_seller_product.vue'
+import hotProducts from "../../components/noPath/hotProducts/hotProducts.vue";
+import hProductList from '../../components/noPath/homePagePList/hProductList.vue';
 </script>
 
 <style scoped>

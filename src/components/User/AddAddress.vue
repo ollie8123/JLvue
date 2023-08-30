@@ -432,7 +432,7 @@ const closeConvenienceModal = () => {
 };
 
 const emap711 = ()=>{
-    window.open('https://emap.presco.com.tw/c2cemap.ashx?eshopid=022&servicetype=3&tempvar=eyJjYWxsYmFja191cmwiOiJodHRwczovL3Nob3BlZS50dy91c2VyL2FjY291bnQvYWRkcmVzcyJ9&url=http%3A%2F%2Flocalhost%3A9999%2FcallBack711','_blank')
+    window.open('https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=http%3A%2F%2Flocalhost%3A9999%2FcallBack711','_blank')
     }
 
     const convenienceModalRefInput = ref(null);

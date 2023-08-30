@@ -9,7 +9,7 @@
               display: flex; align-items: center; justify-content: center; overflow: hidden;
               border-radius:50% ">
             <img style="max-width: 130%; max-height: 130%;"
-              :src=seller.photoPath> 
+              :src=image> 
              </ElAside>
              <ElMain>
                 <div>賣家名稱:</div> 
@@ -48,11 +48,26 @@ const newDate = (time) => {
       const day = String(date.getDate()).padStart(2, '0');
       return `${year}/${month}/${day}`;
 }
-onMounted(() => {
+const image=ref('')
+onMounted(async() => {
     CookieAxios.get(`/public/ProductPageSelectSeller?productPageId=${props.ProductPageId}`).then((req) => { 
         Object.assign(seller, req.data.data) 
     })
- })
+  try {
+    const response = await CookieAxios.post('/public/productPageSellerPhoto', {ProductPageId:props.ProductPageId});
+        
+        if (response.status === 204) {  // Checking for NO_CONTENT status
+            return;
+        }
+        
+        image.value = `data:image/*;base64,${response.data}`;
+
+    } catch (error) {
+        console.error("An error occurred while fetching user photo:", error);
+    }
+})
+
+
 </script>
 
 <style>

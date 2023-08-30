@@ -42,4 +42,13 @@ function successMsgTimer(message, time) {
   });
 }
 
-export { errorMsg,successMsg, successMsgTimer, errorsMsgTimer };
+function infoMsgTimer(message, time) {
+  Swal.fire({
+    icon: "info",
+    title: message,
+    showConfirmButton: false,
+    timer: time,
+    didOpen: setZIndexForSwal,
+  });
+}
+export { errorMsg, successMsg, successMsgTimer, errorsMsgTimer, infoMsgTimer };

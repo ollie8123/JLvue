@@ -28,10 +28,10 @@
               display: flex; align-items: center; justify-content: center; overflow: hidden;
               border-radius:50% ">
             <img style="max-width: 140%; max-height: 140%;"
-              :src=review.userPhotoPath> 
+              :src=data+review.userPhotoPath> 
              </ElAside>
              <ElMain style="padding: 0px 20px 0px 20px;">
-                <div >{{review.userAccount}}</div>
+                <div >{{review.userAccount .slice(0, 3) + "*****" + review.userAccount .slice(-2)}}</div>
                 <div> 
                    <el-rate disabled  text-color="#ff9900" score-template="{value} points" v-model=review.level />
                 </div>
@@ -89,13 +89,14 @@ import {
 import { ref, onMounted, watch } from "vue";
 import { CookieAxios } from "../../../service/api";
 const props = defineProps(["ProductPageId"]);
+
 //評價統計訊息
 const reviewMsg = ref({});
 //頁面訊息
 const pageMsg = ref({});
 //評價陣列
 const reviewList = ref('');
-
+const data = "data:image/*;base64,";
 const currentPage = ref(1);
 const level = ref(0)
 watch(currentPage, () => {

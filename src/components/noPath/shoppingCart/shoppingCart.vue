@@ -1,6 +1,6 @@
 <template>
   <div class="cartDiv">
-  <el-button type="danger" @click="drawer = true" class="bi bi-cart el-button--large">
+   <el-button type="danger" @click="drawer = true" class="bi bi-cart el-button--large">
       購物車
     </el-button>
 
@@ -75,7 +75,7 @@
                 width: 100%;
               "
             >
-              <span>{{ c.account }}</span>
+              <span>{{ c.sellerName }}</span>
               <!--遍歷商品-->
               <el-row v-for="msg in c.productMsg" :key="msg.cartId">
                 <el-card
@@ -86,6 +86,7 @@
                     width: 100%;
                     margin-top: 5px;
                   "
+                  v-if="msg.stocksType=='inStock'"
                 >
                   <ElContainer style="background-color: rgb(245, 245, 245)">
                     <ElMain style="width: 5%">
@@ -173,7 +174,110 @@
                     </ElMain>
                   </ElContainer>
                 </el-card>
+                <!-- 沒庫存 -->
+                <el-card
+                  :body-style="{ padding: '10px' }"
+                  class="box-card"
+                  style="
+                    background-color: rgb(245, 245, 245);
+                    width: 100%;
+                    margin-top: 5px;
+                  "
+                   v-else-if="msg.stocksType=='emptyStocks'"
+                >  
+                  <ElContainer style="background-color: rgb(245, 245, 245)">
+                    <ElMain style="width: 5%">
+                      <el-checkbox-group v-model="selectedProducts">
+                        <el-checkbox
+                          disabled
+                          :label="msg"
+                          size="large"
+                          >{{ }}</el-checkbox>
+                      </el-checkbox-group>
+                    </ElMain>
+                  
+                    <ElMain
+                      style="
+                        height: 80px;
+                        width: 10%;
+                        background-color: rgb(245, 245, 245);
+                        padding: 0px;
+                      "
+                      class="main"
+                    >
+                      <img
+                        style="
+                          max-width: 100%;
+                          max-height: 100%;
+                          width: auto;
+                          height: auto;
+                        "
+                        :src="msg.productPhoto"
+                      />
+                    </ElMain>
+                    <ElMain
+                      style="width: 30%; background-color: #ed9898"
+                      class="main"
+                    >
+                      <span class="truncate">{{ msg.productName }}</span>
+                    </ElMain>
+                    <ElMain
+                      style="width: 20%; background-color: #c7edcb"
+                      class="main"
+                    >
+                      <span
+                        v-if="msg.productMainName != '~NoSpecification'"
+                        class="truncate"
+                        >{{ msg.productMainName }}</span
+                      >
+                      <span
+                        v-if="msg.productSecondName != '~NoSpecification'"
+                        class="truncate"
+                        >{{ "/" + msg.productSecondName }}</span
+                      >
+                    </ElMain>
+                    <ElMain
+                      style="width: 10%; background-color: #ebed98"
+                      class="main"
+                    >
+                      <span class="truncate">{{
+                        Intl.NumberFormat().format(msg.productPrice)
+                      }}</span>
+                    </ElMain>
+                    <ElMain
+                      style="width: 10%; background-color: #98edcf"
+                      class="main"
+                    >
+                      <el-input-number
+                        v-model="msg.productCount"
+                        :min="1"
+                        :max="msg.stocks"
+                        disabled
+                      />
+                    </ElMain>
+                    <ElMain
+                      style="width: 10%; background-color: #a798ed"
+                      class="main"
+                    >
+                      <span class="truncate">{{
+                        Intl.NumberFormat().format(
+                          msg.productPrice * msg.productCount
+                        )
+                      }}</span>
+                    </ElMain>
+                    <ElMain style="width: 5%" class="main">
+                      <ElButton @click="deleteCart(msg.cartId)"
+                        ><span>刪除</span></ElButton
+                      >
+                    </ElMain>
+                  </ElContainer>
+                  <div>暫無庫存</div>
+                </el-card>
+
+
               </el-row>
+
+
               <el-row v-for="coupon in couponMsg" :key="coupon.sellerId">
                 <el-col v-if="c.id == coupon.sellerId" :span="24">
                   <el-card
@@ -238,6 +342,8 @@
                   </el-card>
                 </el-col>
               </el-row>
+
+
             </el-card>
           </el-row>
         </el-scrollbar>
@@ -274,7 +380,7 @@
           </el-row>
         </el-card>
       </div>
-      <div v-else><span>暫無商品</span></div>
+      <div v-else><ElCard><span>暫無商品</span></ElCard> </div>
     </el-drawer>
   </div>
 </template>
@@ -297,10 +403,11 @@ import {
   ElNotification,
 } from "element-plus";
 import { ref, onMounted, watch } from "vue";
-import { CookieAxios } from "../../../service/api";
+import { axios, CookieAxios } from "../../../service/api";
 import { useStore } from "vuex";
-import { errorMsg } from "../../../service/sweetalert2.js";
+import { errorMsg ,infoMsgTimer} from "../../../service/sweetalert2.js";
 import { useRouter } from "vue-router";
+
 const router = useRouter();
 const store = useStore();
 const isLoggedIn = localStorage.getItem("loggedIn") == "true";
@@ -326,13 +433,35 @@ const selectPruductPrice = () => {
   return price;
 };
 //結帳
-const checkout = () => {
+const checkout = async() => {
+  let checkoutProductList = new Array;
+  let checkoutCouponList = selectCoupon.value;
+  
+  let check = new Array;
+  //判斷選取
   if (selectedProducts.value.length > 0) {
-    store.dispatch("getCheckoutList", { checkoutList: selectedProducts.value });
-    router.push({ path: "/checkout" });
-  } else {
-    errorMsg("請先勾選商品");
-  }
+    
+  for (let i = 0; i < selectedProducts.value.length; i++) { 
+    checkoutProductList.push(selectedProducts.value[i].cartId)
+    check.push({id:selectedProducts.value[i].cartId,count:selectedProducts.value[i].productCount})
+    }
+  const res = await CookieAxios.post('/shoppingCartCheckAvailability', check)
+   console.log(res.data)
+   //判斷庫存量
+    if (res.data.code == 1) {
+      store.dispatch("getCheckoutProductList", { checkoutProductList: checkoutProductList});
+      store.dispatch("getCheckoutCouponList", { checkoutCouponList: checkoutCouponList });
+      router.push({ path: "/checkout" });
+    } else { 
+      infoMsgTimer('購物車商品資訊有變動', 1500)
+       setTimeout(() => {
+    location.reload();
+  }, 1500);
+    }
+}
+  else {
+   errorMsg("請先勾選商品");
+ }
 };
 
 //全選按鈕狀態
@@ -364,6 +493,11 @@ const countChange = async (id, count) => {
 };
 //刪除按鈕
 const deleteCart = (id) => {
+
+ console.log(selectedProducts.value)
+  const index = selectedProducts.value.findIndex(product => product.cartId === id);
+  selectedProducts.value.splice(index, 1);
+  console.log(selectedProducts.value)
   let arr = new Array();
   arr.push(id);
   store.dispatch("deleteShoppingCart", { ids: arr });
@@ -409,7 +543,7 @@ const discount = () => {
     }
   }
   }
-  return total;
+  return Math.ceil(total);
 }
 //判斷是否有選擇優惠券
 const selectSellerCoupon = (sellerId) => { 
@@ -418,7 +552,7 @@ const selectSellerCoupon = (sellerId) => {
     if (product.sellerId == sellerId) {
       let sellerCoupon = product.sellerCoupon;
       if (sellerCoupon.type == "rate") {
-        let price = (sellerPrice(sellerId) - (sellerPrice(sellerId) * sellerCoupon.discountRate)) > sellerCoupon.discountMaximum ? sellerCoupon.discountMaximum : (sellerPrice(sellerId) * sellerCoupon.discountRate);
+        let price = (sellerPrice(sellerId) - (sellerPrice(sellerId) * sellerCoupon.discountRate)) > sellerCoupon.discountMaximum ? sellerCoupon.discountMaximum : Math.ceil((sellerPrice(sellerId) * sellerCoupon.discountRate));
         return `${sellerCoupon.discountRate*10}折\t最高折抵${sellerCoupon.discountMaximum}\t以折扣:${price}`;
       } else { 
         return `折抵${sellerCoupon.discountAmount}`;

@@ -111,7 +111,7 @@ const selectButton = () => {
     
 </script>
     
-<style>
+<style >
 
 .searchDiv {
     align-items: center;

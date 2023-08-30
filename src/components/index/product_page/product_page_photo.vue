@@ -25,7 +25,8 @@ watch(() => props.photoId, (newVal) => {
 });
 onMounted(async() => { 
     const res = await CookieAxios.get(`/public/AllProductPagePhoto?productPageId=${props.ProductPageId}`);
-    photos.value = res.data.data;
+  photos.value = res.data.data;
+   console.log(res)
 })
 
 </script>

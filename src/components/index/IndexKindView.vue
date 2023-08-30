@@ -1,5 +1,5 @@
 <template>
-	<div class="bigFarm">
+	<div class="bigDiv">
 		<div class="kind">
 			<span>分類</span>
 			<el-carousel
@@ -143,7 +143,7 @@ onMounted(async () => {
 
 }
 
-.bigFarm{
+.bigDiv{
 	background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
 

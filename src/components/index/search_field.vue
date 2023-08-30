@@ -100,7 +100,7 @@ const selectButton = () => {
 };
 </script>
 
-<style >
+<style scoped>
 .search_field {
   background-color: #f0c8b5;
 }

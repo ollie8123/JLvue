@@ -65,7 +65,7 @@
         </el-container>
         <el-main style="padding: 10px;background-color: rgb(242, 194, 132)">
                <el-button style="margin-left: 20%;" class="elButton" color="#f9a751" @click="addCart" plain>加入購物車</el-button>
-               <el-button class="elButton" color="#f9a751" plain>直接購買</el-button>
+              
        </el-main>
           </el-main>
         </el-container>

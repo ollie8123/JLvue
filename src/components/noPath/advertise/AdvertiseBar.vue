@@ -1,5 +1,5 @@
 <template>
-        <div class="bigFarm">
+        <div class="">
             <div class="d-flex">
                 <!-- 輪播廣告開始 -->
                 <div>
