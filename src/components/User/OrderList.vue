@@ -22,12 +22,12 @@
 <div class="tab-content" id="pills-tabContent">
   <div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="pills-home-all"><orderAll></orderAll></div>
   <div class="tab-pane fade" id="pills-pendingPayment" role="tabpanel" aria-labelledby="pills-pendingPayment-tab">
-    <orderPendingPayment></orderPendingPayment>
+    <orderAll></orderAll>
   </div>
-  <div class="tab-pane fade" id="pills-backOrder" role="tabpanel" aria-labelledby="pills-backOrder-tab"><orderBackOrder></orderBackOrder></div>
-<div class="tab-pane fade" id="pills-toBeReceived" role="tabpanel" aria-labelledby="pills-toBeReceived-tab"><orderToBeReceived></orderToBeReceived></div>
+  <div class="tab-pane fade" id="pills-backOrder" role="tabpanel" aria-labelledby="pills-backOrder-tab"><orderAll></orderAll></div>
+<div class="tab-pane fade" id="pills-toBeReceived" role="tabpanel" aria-labelledby="pills-toBeReceived-tab"><orderAll></orderAll></div>
 <div class="tab-pane fade" id="pills-finished" role="tabpanel" aria-labelledby="pills-finished-tab">
-    <orderFinished></orderFinished>
+  <orderAll></orderAll>
 </div>
 </div>
 </div>
@@ -35,15 +35,6 @@
     
 <script setup >
 import orderAll from '../order/orderAll.vue';
-import orderToBeReceived from'../order/orderToBeReceived.vue';
-import orderPendingPayment from'../order/orderPendingPayment.vue';
-import orderBackOrder from'../order/orderBackOrder.vue';
-import orderFinished from '../order/orderFinished.vue';
-
-
-
-
-
 
 
 
