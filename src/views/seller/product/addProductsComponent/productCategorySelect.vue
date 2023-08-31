@@ -99,7 +99,7 @@
 	</Teleport>
 </template>
 <script setup>
-import { ref, computed, nextTick } from 'vue';
+import { ref, computed, nextTick, defineEmits } from 'vue';
 import { Modal } from 'bootstrap/dist/js/bootstrap.min.js';
 import { CookieAxios } from '@/service/api.js';
 
@@ -209,11 +209,17 @@ const finalSelectedCategories = ref({
 		calculateCategoryValue(finalSelectedCategories)
 	),
 });
+
+//準備將資料傳至父組件
+const emit = defineEmits(['dataToParent']);
+
 const saveSelectResult = () => {
 	finalSelectedCategories.value.mainCategory =
 		categorySelectResult.value.mainCategory;
 	finalSelectedCategories.value.secondCategory =
 		categorySelectResult.value.secondCategory;
+		//只傳送第二層類別給父組件
+	emit('dataToParent', finalSelectedCategories.value.secondCategory);
 };
 
 //========== Select Result Css ========

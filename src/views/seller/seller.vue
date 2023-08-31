@@ -3,10 +3,10 @@
 		<div class="container-fluid">
 			<ul class="navbar-nav">
 				<li class="nav-item active">
-					<RouterLink
+					<router-link
 						class="nav-link"
 						to="/seller"
-						>賣家中心</RouterLink
+						>賣家中心</router-link
 					>
 				</li>
 			</ul>
@@ -33,20 +33,20 @@
 						</a> -->
 					<!-- </li> -->
 					<li class="nav-item dropdown">
-						<RouterLink
+						<router-link
 							class="nav-link dropdown-toggle"
 							data-bs-toggle="dropdown"
 							to="/seller/order"
 						>
 							訂單管理
-						</RouterLink>
+						</router-link>
 						<ul class="dropdown-menu fade-up">
 							<li>
-								<RouterLink
+								<router-link
 									class="dropdown-item"
 									to="/seller/order"
 								>
-									訂單1</RouterLink
+									訂單1</router-link
 								>
 							</li>
 							<li>
@@ -68,13 +68,13 @@
 						</ul>
 					</li>
 					<li class="nav-item dropdown">
-						<RouterLink
+						<router-link
 							class="nav-link dropdown-toggle"
 							data-bs-toggle="dropdown"
 							to="/seller/management"
 						>
 							賣場管理
-						</RouterLink>
+						</router-link>
 						<ul class="dropdown-menu fade-up">
 							<li>
 								<a
@@ -103,29 +103,29 @@
 						</ul>
 					</li>
 					<li class="nav-item dropdown">
-						<RouterLink
+						<router-link
 							class="nav-link dropdown-toggle"
 							data-bs-toggle="dropdown"
 							to="/seller/product/myProducts"
 						>
 							商品管理
-						</RouterLink>
+						</router-link>
 						<ul class="dropdown-menu fade-up">
 							<li>
-								<RouterLink
+								<router-link
 									class="dropdown-item"
 									to="/seller/product/myProducts"
 								>
-									我的商品</RouterLink
+									我的商品</router-link
 								>
 							</li>
 							<li>
-								<RouterLink
+								<router-link
 									class="dropdown-item"
 									to="/seller/product/addProducts"
 								>
 									新增商品
-								</RouterLink>
+								</router-link>
 							</li>
 							<li>
 								<a
@@ -138,42 +138,42 @@
 						</ul>
 					</li>
 					<li class="nav-item dropdown">
-						<RouterLink
+						<router-link
 							class="nav-link dropdown-toggle"
 							data-bs-toggle="dropdown"
 							to="/seller/coupon/find"
 						>
 							優惠券管理
-						</RouterLink>
+						</router-link>
 						<ul class="dropdown-menu fade-up">
 							<li>
-								<RouterLink
+								<router-link
 									class="dropdown-item"
 									to="/seller/coupon/find"
 								>
-									優惠券總覽</RouterLink
+									優惠券總覽</router-link
 								>
 							</li>
 							<li>
-								<RouterLink
+								<router-link
 									class="dropdown-item"
 									to="/seller/coupon/insert"
 								>
-									優惠券新增</RouterLink
+									優惠券新增</router-link
 								>
 							</li>
 							<li>
-								<RouterLink
+								<router-link
 									class="dropdown-item"
 									to="/seller/coupon/insert"
 								>
-									優惠券圖表</RouterLink
+									優惠券圖表</router-link
 								>
 							</li>
 						</ul>
 					</li>
 				</ul>
-				
+
 				<ul class="navbar-nav ms-auto">
 					<!-- <li class="nav-item">
 						<a
@@ -184,10 +184,10 @@
 						</a>
 					</li> -->
 					<li class="nav-item active">
-						<RouterLink
+						<router-link
 							class="nav-link"
 							to="/"
-							>離開賣家中心</RouterLink
+							>離開賣家中心</router-link
 						>
 					</li>
 					<li class="nav-item dropdown">
@@ -232,7 +232,7 @@
 	</nav>
 
 	<div class="seller-container">
-		<RouterView />
+		<router-view />
 	</div>
 </template>
 
@@ -289,8 +289,8 @@ nav {
 	position: sticky;
 	margin-top: 65px;
 }
-.seller-container{
-  position: sticky;
-  margin-top: 65px;
+.seller-container {
+	position: sticky;
+	margin-top: 65px;
 }
 </style>

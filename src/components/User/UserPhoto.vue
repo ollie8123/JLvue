@@ -111,6 +111,7 @@ onMounted(async () => {
         }
         
         image.value = `data:image/*;base64,${response.data}`;
+        console.log(`${response.data}`);
 
     } catch (error) {
         console.error("An error occurred while fetching user photo:", error);

@@ -29,7 +29,7 @@
 <div>
     <div class="fw">關於精靈</div>
     <ul>
-        <li>關於蝦皮</li>
+        <li>關於精靈</li>
         <li>加入我們</li>
         <li>精靈條款</li>
         <li>隱私權政策</li>

@@ -59,41 +59,26 @@
 			請勿輸入五個以上的圖片!!
 		</span>
 	</div>
-	<div @click="testPhotoUpload()">test</div>
+	<!-- <div @click="testPhotoUpload()">test</div> -->
 </template>
 <script setup>
-import { ref, watchEffect } from 'vue';
-
-import { CookieAxios } from '@/service/api.js';
-
-const productManageAPIUrl = `${import.meta.env.VITE_API_JAVAURL}test`;
-
-const testPhotoUpload = async () => {
-	console.log('start');
-	console.log(pictureInput.value.files);
-	const formData = new FormData();
-	for (let data of pictureInput.value.files) {
-		formData.append('productPageImgs', data);
-	}
-	const response = await CookieAxios({
-		headers: {
-			'Content-Type': 'multipart/form-data',
-		},
-		method: 'POST',
-		url: productManageAPIUrl + '/photoUpload',
-		data: formData,
-	});
-	console.log(response.data.msg);
-};
+import { ref, watchEffect, onUpdated, defineEmits } from 'vue';
 
 const pictureInput = ref();
 const imgs = ref([]);
+const imgFiles = ref([]);
 const imgCount = ref(0);
+const wrongDataTypeCheck = ref(false);
+const uploadLimitCheck = ref(false);
+const emit = defineEmits(['dataToParent']);
+
 watchEffect(() => {
 	imgCount.value = imgs.value.length;
 });
-const wrongDataTypeCheck = ref(false);
-const uploadLimitCheck = ref(false);
+
+onUpdated(() => {
+	emit('dataToParent', imgFiles.value);
+});
 
 const triggerInput = () => {
 	if (imgCount.value >= 5) {
@@ -119,13 +104,12 @@ const pictureSelected = (e) => {
 			continue;
 		}
 		const reader = new FileReader();
-		reader.addEventListener('load', pictureLoaded);
+		reader.addEventListener('load', (e) => {
+			imgFiles.value.push(picture);
+			imgs.value.push(e.target.result);
+		});
 		reader.readAsDataURL(picture);
 	}
-};
-
-const pictureLoaded = (e) => {
-	imgs.value.push(e.target.result);
 };
 
 // Interactive Function Block Start //
@@ -143,6 +127,7 @@ const getDeleteIconState = (imgNum) => {
 const deleteImg = (imgNum) => {
 	deleteIconStates.value.splice(imgNum, 1);
 	imgs.value.splice(imgNum, 1);
+	imgFiles.value.splice(imgNum, 1);
 };
 </script>
 <style scoped>

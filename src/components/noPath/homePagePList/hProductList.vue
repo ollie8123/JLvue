@@ -3,19 +3,19 @@
     <div class="bigFarm">
         <div class="row row-cols-2">
 <!-- 商品欄 -->
-            <div class="productFarm">
+            <div class="productFarm " v-for="product in products" :key="product.id">
                 <div class="d-flex flex-column ">
                     <!-- 照片 -->
                     <div class="photoDiv">
 
-                        <img src="/image/cravingread1.jpg" alt="" class="productImg">
+                        <img :src="`data:image/*;base64,${product.image}`" alt="" class="productImg">
                     </div>
                      <!-- 文字 -->
                     <div class="productText mt-1">
-                        <div class="productName fw-bold">穩紮穩打日本語1</div>
+                        <div class="productName fw-bold" >{{product.name}}</div>
                         <div class="d-flex justify-content-between mt-3">
-                            <div class="productPrice fw-bold">$280</div>
-                            <div class="productSell">已售出200</div>
+                            <div class="productPrice fw-bold">${{product.price}}</div>
+                            <div class="productSell">已售出{{product.sales}}</div>
 
                         </div>
 
@@ -34,8 +34,31 @@
     </div>
 </template>
     
-<script setup lang='ts'>
-    
+<script setup >
+import { ref,onMounted} from 'vue';
+import CookieAxiosaxios from 'axios';
+
+const products = ref([]);
+
+const productsListURL = `${import.meta.env.VITE_API_JAVAURL}find40Products`;
+onMounted(async () => {    
+
+    const response = await CookieAxiosaxios.post(productsListURL)
+
+    products.value = response.data.data.map(productInfo => {
+        console.log(response.data.data);
+
+    return {
+        id: productInfo.product.id,
+        name: productInfo.product.name,
+        image: productInfo.image,
+        price:productInfo.price,
+        sales:productInfo.sales,
+
+    };
+});
+
+});
 </script>
     
 <style scoped>
@@ -43,12 +66,11 @@
 .bigFarm{
     margin-top: 15px;
     min-height: 800px;
-
     background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
-    padding-top: 30px;
-    padding-left: 30px;
+    padding-top: 25px;
+    padding-left: 25px;
    
 }
 
@@ -59,6 +81,8 @@
     border-radius: 15px;
     width: 250px;
     height: 300px;
+    margin-right: 5px;
+    margin-bottom: 10px;
   
 
 }

@@ -1,0 +1,53 @@
+{
+	"name": [
+		{
+			"min": 5,
+			"max": 70,
+			"message": "請輸入5-70字的商店名稱",
+			"trigger": "blur"
+		},
+		{ "required": true, "message": "請輸入商品頁面名稱", "trigger": "blur" }
+	],
+	"category": [
+		{ "required": true, "message": "請選擇商品類別名稱", "trigger": "blur" }
+	],
+	"description": [
+		{ "max": 3000, "message": "商品說明上限為3000字", "trigger": "blur" },
+		{
+			"min": 30,
+			"required": true,
+			"message": "請輸入至少30字的商品說明",
+			"trigger": "blur"
+		}
+	],
+	"price": [
+		{
+			"type": "number",
+			"max": 499999,
+			"message": "價格最大為499,999元",
+			"trigger": "blur"
+		},
+		{
+			"type": "number",
+			"min": 1,
+			"message": "價格最小為1元",
+			"trigger": "blur"
+		},
+		{ "required": true, "message": "請輸入價格", "trigger": "blur" }
+	],
+	"stocks": [
+		{
+			"type": "number",
+			"max": 100000,
+			"message": "庫存最大為100000分",
+			"trigger": "blur"
+		},
+		{
+			"type": "number",
+			"min": 1,
+			"message": "庫存最少為1分",
+			"trigger": "blur"
+		},
+		{ "required": true, "message": "請輸入庫存", "trigger": "blur" }
+	]
+}

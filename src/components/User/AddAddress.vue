@@ -141,7 +141,7 @@
 
                                 <div class="mb-3 form-floating flex-fill mx-3">
                                     <input type="text" id="floatingTextarea2" class="form-control" name="recipientPhone"
-                                        placeholder="電話" required v-model="address.recipientPhone"  />
+                                        placeholder="電話" required v-model="address.recipientPhone"  maxlength="10"/>
                                     <label for="floatingTextarea2">電話</label>
                                 </div>
                             </div>

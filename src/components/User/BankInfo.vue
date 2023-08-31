@@ -185,6 +185,9 @@ const addSeller = async()=>{
       console.error('Failed to fetch Bank');
     }
 
+    localStorage.removeItem('storeName');
+    localStorage.removeItem('icNumber');
+    
     Swal.fire({
   position: 'center',
   icon: 'success',
@@ -192,6 +195,8 @@ const addSeller = async()=>{
   showConfirmButton: false,
   timer: 1500
 })
+
+
 router.push({ name: "seller" });
 
 } else {

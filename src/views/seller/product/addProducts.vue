@@ -25,7 +25,7 @@
 							style="font-size: 30px"
 						>
 							<el-form-item label="商品頁面圖片"
-								><multi-img-upload
+								><multi-img-upload @data-to-parent="settingImgsDataFromChild"
 							/></el-form-item>
 							<el-form-item
 								prop="name"
@@ -39,6 +39,7 @@
 								prop="category"
 								label="商品類別"
 								><product-category-select
+									@data-to-parent="settingCategoryDataFromChild"
 							/></el-form-item>
 							<el-form-item
 								prop="description"
@@ -62,30 +63,18 @@
 						<h4 class="card-title">銷售資訊</h4>
 					</div>
 					<div class="card-body">
-						<el-form
-							v-if="true"
-							label-position="right"
-							label-width="140px"
-							:rules="formRules"
-							:model="products[0]"
-							style="font-size: 30px"
-							><el-form-item label="開啟規格">點我</el-form-item
-							><el-form-item
-								label="價格"
-								prop="price"
-								><el-input
-									class="el-input-small"
-									v-model.number="products[0].price"
-								></el-input
-							></el-form-item>
-							<el-form-item
-								label="商品數量"
-								prop="stock"
-								><el-input
-									class="el-input-small"
-									v-model.number="products[0].stock"
-								></el-input></el-form-item
-						></el-form>
+						<single-product-setting-block
+							v-if="blockShowSetting.singleProductBlock"
+							:formRules="formRules"
+							@data-to-parent="settingSingleProductFromChild"
+							@change-to-specification-mode="changeShowingBlock"
+						/>
+						<specification-product-block
+							v-if="blockShowSetting.specificationProductBlock"
+							:formRules="formRules"
+							@data-to-parent="settingSpecificationProductFromChild"
+							@change-to-single-product-mode="changeShowingBlock"
+						/>
 					</div>
 				</section>
 				<section
@@ -129,11 +118,6 @@
 						<a
 							href="#"
 							class="card-link"
-							>Link 1</a
-						>
-						<a
-							href="#"
-							class="card-link"
 							>Link 2</a
 						>
 					</div>
@@ -141,72 +125,138 @@
 			</el-scrollbar>
 		</div>
 	</div>
-	<footer class="foot-bar"><upload-foot-bar /></footer>
+	<footer class="foot-bar">
+		<upload-foot-bar @trigger-to-parent="submitProductPageData" />
+	</footer>
 </template>
 <script setup>
 import { ref } from 'vue';
-import { ElScrollbar } from 'element-plus';
+import { CookieAxios } from '@/service/api.js';
+import formRulesData from './addProductsComponent/addProductsFormRules.json';
 
 import addProductsSideNav from './addProductsComponent/addProductsSideNav.vue';
 import multiImgUpload from './addProductsComponent/multiImgUpload.vue';
 import productCategorySelect from './addProductsComponent/productCategorySelect.vue';
 import uploadFootBar from './addProductsComponent/uploadFootBar.vue';
+import singleProductSettingBlock from './addProductsComponent/singleProductSettingBlock.vue';
+import specificationProductBlock from './addProductsComponent/specificationProductBlock.vue';
 
-import { ElInput, ElForm, ElFormItem } from 'element-plus';
+import { ElInput, ElForm, ElFormItem, ElScrollbar } from 'element-plus';
+const productManageAPIUrl = `${import.meta.env.VITE_API_JAVAURL}productManage`;
+
+const formRules = ref(formRulesData);
 
 const unsubmitProductPageData = ref({
-	seller: null,
 	secondProductCategory: null,
 	productPageStatus: null,
 	name: null,
 	productDescription: null,
-	products: null,
 	mainSpecificationClassOptions: null,
 	secondSpecificationClassOptions: null,
-	productPagePhotos: null,
 });
 
-const formRules = ref({
-	name: [
-		{ min: 5, max: 70, message: '請輸入5-70字的商店名稱', trigger: 'blur' },
+const settingCategoryDataFromChild = (data) => {
+	formRules.value.category[0].required = false;
+	unsubmitProductPageData.value.secondProductCategory = data;
+};
 
-		{ required: true, message: '請輸入商品頁面名稱', trigger: 'blur' },
-	],
-	category: [
-		{ required: true, message: '請選擇商品類別名稱', trigger: 'blur' },
-	],
-	description: [
-		{ max: 3000, message: '商品說明上限為3000字', trigger: 'blur' },
-		{
-			min: 30,
-			required: true,
-			message: '請輸入至少30字的商品說明',
-			trigger: 'blur',
-		},
-	],
-	price: [
-		{
-			type: 'number',
-			max: 499999,
-			message: '價格最大為499,999元',
-			trigger: 'blur',
-		},
-		{ type: 'number', min: 1, message: '價格最小為1元', trigger: 'blur' },
-		{ required: true, message: '請輸入價格', trigger: 'blur' },
-	],
-	stock: [
-		{
-			type: 'number',
-			max: 100000,
-			message: '庫存最大為100000分',
-			trigger: 'blur',
-		},
-		{ type: 'number', min: 1, message: '庫存最少為1分', trigger: 'blur' },
-		{ required: true, message: '請輸入庫存', trigger: 'blur' },
-	],
+const unsubmitProductPagePhotos = ref([]);
+
+const settingImgsDataFromChild = (imgs) => {
+	unsubmitProductPagePhotos.value = imgs;
+};
+
+const unssubmitProducts = ref([]);
+
+const settingSingleProductFromChild = (data) => {
+	unssubmitProducts.value[0] = data;
+};
+
+const settingSpecificationProductFromChild = (data) => {
+	console.log(data);
+};
+
+const blockShowSetting = ref({
+	singleProductBlock: true,
+	specificationProductBlock: false,
 });
 
-const products = ref([{ price: null, stock: null }]);
+const changeShowingBlock = (showMode) => {
+	if (showMode === 'specification-mode') {
+		blockShowSetting.value.singleProductBlock = false;
+		blockShowSetting.value.specificationProductBlock = true;
+	}
+	if (showMode === 'single-product-mode') {
+		blockShowSetting.value.singleProductBlock = true;
+		blockShowSetting.value.specificationProductBlock = false;
+	}
+};
+
+const submitProductPageData = async (productPageStatus) => {
+	try {
+		const pageId = await uploadProductPageData(unsubmitProductPageData.value);
+		await uploadProducts(unssubmitProducts.value, pageId);
+		await uploadProductPagePhotos(unsubmitProductPagePhotos.value, pageId);
+		await pageCreateDone(pageId, productPageStatus);
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+const uploadProductPageData = async (pageData) => {
+	const response = await CookieAxios({
+		method: 'POST',
+		url: productManageAPIUrl + '/uploadProductPageData',
+		data: pageData,
+	});
+	return response.data.data;
+};
+
+const uploadProducts = async (products, pageId) => {
+	const response = await CookieAxios({
+		method: 'POST',
+		url: productManageAPIUrl + '/uploadProducts',
+		params: {
+			pageId: pageId,
+		},
+		data: products,
+	});
+	return response.data.msg;
+};
+
+const pageCreateDone = async (pageId, pageStatus) => {
+	const response = await CookieAxios({
+		method: 'GET',
+		url: productManageAPIUrl + '/pageCreateDone',
+		params: {
+			pageId: pageId,
+			pageStatus: pageStatus,
+		},
+	});
+	return response.data.msg;
+};
+
+const uploadProductPagePhotos = async (photos, pageId) => {
+	if (photos.length === 0) {
+		return 'nophoto';
+	}
+	const formData = new FormData();
+	for (let data of photos) {
+		formData.append('productPageImgs', data);
+	}
+	const response = await CookieAxios({
+		headers: {
+			'Content-Type': 'multipart/form-data',
+		},
+		method: 'POST',
+		url: productManageAPIUrl + '/uploadProductPagePhotos',
+		data: formData,
+		params: {
+			pageId: pageId,
+		},
+	});
+	return response.data.msg;
+};
 </script>
 <style scoped>
 * {
@@ -252,16 +302,11 @@ const products = ref([{ price: null, stock: null }]);
 	font-size: 18px;
 }
 
-.el-input-small {
-	width: 300px;
-}
-
 .foot-bar {
 	position: relative;
 	bottom: 50px;
 	height: 50px;
 	width: 100%;
 	z-index: 2;
-
 }
 </style>
