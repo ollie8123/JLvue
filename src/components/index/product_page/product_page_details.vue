@@ -1,8 +1,8 @@
 <template>
   <div>
-      <el-main style="background-color: rgb(242, 194, 132); margin-top: 5px">商品規格
-      <div>{{ props.ProductPageId }}</div>
-      <div style="white-space: pre-line;">{{ `12121\nqwe\nqew\nasd\n1\n231` }}</div>
+      <el-main style="background-color: rgb(242, 194, 132); margin-top: 5px">
+      <div>商品介紹</div>
+      <div style="white-space: pre-line;">{{ details.productDescription}}</div>
       
     </el-main>
 

@@ -2,7 +2,8 @@
 
 <nav id="mainNav" class="navbar navbar-light navbar-expand-lg bg-black text-uppercase">
     <div class="d-flex w-100 justify-content-between">
-    <div > <a class="navbar-brand  " href="#page-top"><RouterLink to="/"><img src="/image/logo/navbarlogo.png" alt="" class="logo"></RouterLink></a>
+    <div > 
+<a class="navbar-brand " href="#page-top"><RouterLink to="/"><img src="/image/logo/navbarlogo.png" alt="" class="logo"></RouterLink></a>
     </div>
         <div id="navbarResponsive " class="rightDiv">
             <ul class="navbar-nav ms-auto ulTag">

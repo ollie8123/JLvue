@@ -4,7 +4,8 @@
         <div class="row row-cols-2">
 <!-- 商品欄 -->
             <div class="productFarm " v-for="product in products" :key="product.id">
-                <div class="d-flex flex-column ">
+                <div class="d-flex flex-column "
+                @click="selectProduct(product.name, product.id)">
                     <!-- 照片 -->
                     <div class="photoDiv">
 
@@ -37,6 +38,18 @@
 <script setup >
 import { ref,onMounted} from 'vue';
 import CookieAxiosaxios from 'axios';
+import { useRouter } from "vue-router";
+const router = useRouter();
+
+
+const selectProduct = (PageId, PageName) => {
+  router.push({
+    path: "/product_page",
+    query: { pd:PageId+Math.random()+"-"+PageName },
+  });
+};
+
+
 
 const products = ref([]);
 
@@ -46,7 +59,6 @@ onMounted(async () => {
     const response = await CookieAxiosaxios.post(productsListURL)
 
     products.value = response.data.data.map(productInfo => {
-        console.log(response.data.data);
 
     return {
         id: productInfo.product.id,

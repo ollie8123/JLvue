@@ -41,6 +41,12 @@ import orderBackOrder from'../order/orderBackOrder.vue';
 import orderFinished from '../order/orderFinished.vue';
 
 
+
+
+
+
+
+
 </script>
     
 <style scoped>

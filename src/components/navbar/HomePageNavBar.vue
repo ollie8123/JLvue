@@ -45,9 +45,6 @@
                     <RouterLink class="dropdown-item" to="/user">個人資料</RouterLink>
                   </li>
                   <li v-if="isLoggedIn">
-                    <RouterLink class="dropdown-item" to="＃">購買清單</RouterLink>
-                  </li>
-                  <li v-if="isLoggedIn">
                     <a class="dropdown-item" @click="logout">登出</a>
                   </li>
                   <!-- 登入後才會顯示 -->
@@ -110,7 +107,6 @@ const beSeller = () => {
     router.push('/login');
   }
 }
-
 const userPhotoURL = `${import.meta.env.VITE_API_JAVAURL}userPhoto`;
 const userAccountURL = `${import.meta.env.VITE_API_JAVAURL}findUserByEmail`;
 onMounted(async () => {

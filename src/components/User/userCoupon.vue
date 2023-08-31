@@ -114,10 +114,21 @@ const inputCouponCode = async () => {
         }
 
         if (response.data.msg === "優惠券尚未開始領取") {
+
+            const rawData = "2023-09-14T15:26:00";
+const dateObj = new Date(rawData);
+
+const year = dateObj.getFullYear();
+const month = String(dateObj.getMonth() + 1).padStart(2, '0');  
+const day = String(dateObj.getDate()).padStart(2, '0');
+const hour = String(dateObj.getHours()).padStart(2, '0');
+const minute = String(dateObj.getMinutes()).padStart(2, '0');
+
+const formattedDate = `${year}年${month}月${day}日 ${hour}:${minute}`;
             Swal.fire({
                 icon: 'error',
                 title: '優惠券尚未開始領取',
-                text: "開始領取時間" + response.data.data,
+                text: "開始領取時間" + formattedDate,
             })
         }
 
