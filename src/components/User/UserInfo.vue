@@ -62,7 +62,8 @@
                             <td class="td2 d-flex">
                                 <v-field type="phone" id="inputPhone" class="form-control" name="phone"
                                     placeholder="User Phone" required  v-model="user.phone"  :rules="isPhone"
-                                    :class="{ 'is-invalid': errors['phone'] }" />
+                                    :class="{ 'is-invalid': errors['phone'] }"
+                                    maxlength="10" />
                                 <error-message name="phone" class="invalid-feedback "></error-message>
                             </td>
                         </tr>

@@ -220,8 +220,12 @@ const checkInput = () => {
 })
       bank.testNumber= ''
     }
-    btnClass.value = 'btn btn-success testBtn'
+    if(bank.testNumber == '1355'){
+        btnClass.value = 'btn btn-success testBtn'
     user.btnText = "驗證成功"
+
+    }
+    
   }
 }
 

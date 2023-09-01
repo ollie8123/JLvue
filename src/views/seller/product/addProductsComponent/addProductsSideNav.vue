@@ -25,9 +25,9 @@ import { ref } from 'vue';
 
 const cardList = ref({
 	productPageInfo: '商品頁面資訊',
-	productSpecificationInfo: '商品規格資訊',
+	productSpecificationInfo: '銷售資訊',
 	logisticInfo: '物流資訊',
-	otherInfo: '其他資訊',
+	otherInfo: '其他',
 });
 </script>
 <style scoped>

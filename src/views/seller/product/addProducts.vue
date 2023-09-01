@@ -85,22 +85,36 @@
 					<div class="card-body">
 						<h4 class="card-title">物流資訊</h4>
 					</div>
-					<img
-						src="holder.js/100x180/"
-						alt=""
-					/>
 					<div class="card-body">
-						<p class="card-text">Text</p>
-						<a
-							href="#"
-							class="card-link"
-							>Link 1</a
+						<el-form
+							label-position="right"
+							label-width="140px"
+							:rules="formRules"
+							style="font-size: 30px"
 						>
-						<a
-							href="#"
-							class="card-link"
-							>Link 2</a
-						>
+							<el-form-item label="重量">
+								<el-input class="el-input-small">
+									<template #append>kg</template></el-input
+								>
+							</el-form-item>
+							<el-form-item label="包裹尺寸"
+								><el-input class="el-input-small">
+									<template #append>長</template></el-input
+								><el-icon class="X"><CloseBold /></el-icon
+								><el-input class="el-input-small">
+									<template #append>寬</template></el-input
+								><el-icon class="X"><CloseBold /></el-icon
+								><el-input class="el-input-small">
+									<template #append>高</template></el-input
+								></el-form-item
+							>
+							<el-form-item label="超商物流"
+								><el-checkbox
+									label="7-11"
+									size="large"
+									border
+							/></el-form-item>
+						</el-form>
 					</div>
 				</section>
 				<section
@@ -110,16 +124,42 @@
 					<div class="card-body">
 						<h4 class="card-title">其他</h4>
 					</div>
-					<img
-						src="holder.js/100x180/"
-						alt=""
-					/>
 					<div class="card-body">
-						<p class="card-text">Text</p>
-						<a
-							href="#"
-							class="card-link"
-							>Link 2</a
+						<el-form
+							label-position="right"
+							label-width="140px"
+							:rules="formRules"
+							style="font-size: 30px"
+							><el-form-item label="商品狀況">
+								<el-radio-group v-model="productUsage">
+									<el-radio
+										label="new"
+										size="large"
+										border
+										>全新</el-radio
+									>
+									<el-radio
+										label="secondHand"
+										size="large"
+										border
+										>二手</el-radio
+									>
+								</el-radio-group></el-form-item
+							><el-form-item label="備貨時間">
+								<el-radio-group v-model="prepareTime">
+									<el-radio
+										label="now"
+										size="large"
+										border
+										>立即</el-radio
+									><el-radio
+										label="wait"
+										size="large"
+										border
+										>較長</el-radio
+									>
+								</el-radio-group></el-form-item
+							></el-form
 						>
 					</div>
 				</section>
@@ -132,6 +172,7 @@
 </template>
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { CookieAxios } from '@/service/api.js';
 import formRulesData from './addProductsComponent/addProductsFormRules.json';
 
@@ -148,7 +189,15 @@ import {
 	ElFormItem,
 	ElScrollbar,
 	ElLoading,
+	ElCheckbox,
+	ElIcon,
+	ElRadioGroup,
+	ElRadio,
 } from 'element-plus';
+import { CloseBold } from '@element-plus/icons-vue';
+const productUsage = ref('new');
+const prepareTime = ref('now');
+const router = useRouter();
 const productManageAPIUrl = `${import.meta.env.VITE_API_JAVAURL}productManage`;
 
 const formRules = ref(formRulesData);
@@ -230,6 +279,7 @@ const submitProductPageData = async (productPageStatus) => {
 		await pageCreateDone(pageId, productPageStatus);
 		await delay(500);
 		loading.close();
+		selectProduct(pageId);
 	} catch (error) {
 		console.error(error);
 	}
@@ -312,6 +362,15 @@ const uploadSpecPhotos = async (photos, pageId) => {
 	});
 	return response.data.msg;
 };
+
+const selectProduct = (PageId) => {
+	router.push({
+		path: '/product_page',
+		query: {
+			pd: unsubmitProductPageData.value.name + Math.random() + '-' + PageId,
+		},
+	});
+};
 </script>
 <style scoped>
 * {
@@ -363,5 +422,12 @@ const uploadSpecPhotos = async (photos, pageId) => {
 	height: 50px;
 	width: 100%;
 	z-index: 2;
+}
+.el-input-small {
+	width: 300px;
+}
+
+.X {
+	margin: 0 8px;
 }
 </style>

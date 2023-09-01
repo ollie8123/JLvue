@@ -2,6 +2,7 @@
 	<el-table
 		:data="empty"
 		border
+		style="max-width: 1090px"
 	>
 		<el-table-column
 			v-for="(option, index) in modifiedOptions"

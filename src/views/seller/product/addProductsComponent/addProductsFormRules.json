@@ -38,8 +38,8 @@
 	"stocks": [
 		{
 			"type": "number",
-			"max": 100000,
-			"message": "庫存最大為100000分",
+			"max": 30000,
+			"message": "庫存最大為30000分",
 			"trigger": "blur"
 		},
 		{

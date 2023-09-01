@@ -71,6 +71,7 @@
 					label-position="right"
 					label-width="80px"
 					:rules="props.formRules"
+					
 					><el-form-item label="規格二"
 						><el-input
 							v-model="secondSpecificationClassName"

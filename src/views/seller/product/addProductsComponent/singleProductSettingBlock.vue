@@ -36,7 +36,7 @@
 </template>
 <script setup>
 import { ref, defineEmits, defineProps } from 'vue';
-import { ElInput, ElForm, ElFormItem, ElButton,ElInputNumber } from 'element-plus';
+import { ElForm, ElFormItem, ElButton,ElInputNumber } from 'element-plus';
 
 defineProps({
 	formRules: Object,
@@ -63,6 +63,7 @@ const changeToSpecificationMode = () => {
 .el-form-item {
 	--el-form-label-font-size: 16px;
 }
+
 .el-input-small {
 	width: 300px;
 }

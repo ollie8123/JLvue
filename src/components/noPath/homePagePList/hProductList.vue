@@ -15,7 +15,12 @@
                     <div class="productText mt-1">
                         <div class="productName fw-bold" >{{product.name}}</div>
                         <div class="d-flex justify-content-between mt-3">
-                            <div class="productPrice fw-bold">${{product.price}}</div>
+                            <!-- 如果有 product.price -->
+<div class="productPrice fw-bold" v-if="product.price">${{product.price}}</div>
+
+<!-- 如果沒有 product.price -->
+<div class="productPrice fw-bold" v-else>${{product.minPrice}}&nbsp;~&nbsp;{{ product.maxPrice }}</div>
+
                             <div class="productSell">已售出{{product.sales}}</div>
 
                         </div>
@@ -37,7 +42,7 @@
     
 <script setup >
 import { ref,onMounted} from 'vue';
-import CookieAxiosaxios from 'axios';
+import { CookieAxios } from '../../../service/api';
 import { useRouter } from "vue-router";
 const router = useRouter();
 
@@ -53,11 +58,11 @@ const selectProduct = (PageId, PageName) => {
 
 const products = ref([]);
 
-const productsListURL = `${import.meta.env.VITE_API_JAVAURL}find40Products`;
+const productsListURL = `${import.meta.env.VITE_API_JAVAURL}find20Products`;
 onMounted(async () => {    
 
-    const response = await CookieAxiosaxios.post(productsListURL)
-
+    const response = await CookieAxios.post(productsListURL)
+console.log(response);
     products.value = response.data.data.map(productInfo => {
 
     return {
@@ -66,6 +71,8 @@ onMounted(async () => {
         image: productInfo.image,
         price:productInfo.price,
         sales:productInfo.sales,
+        minPrice:productInfo.minPrice,
+        maxPrice:productInfo.maxPrice,
 
     };
 });
