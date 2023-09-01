@@ -15,26 +15,28 @@
 		><el-form-item
 			label="價格"
 			prop="price"
-			><el-input
+			><el-input-number
 				class="el-input-small"
+				:controls="false"
 				v-model.number="singleProduct.price"
 				@input="dataToParent"
-			></el-input
+			></el-input-number
 		></el-form-item>
 		<el-form-item
 			label="商品數量"
 			prop="stocks"
-			><el-input
+			><el-input-number
 				class="el-input-small"
+				:controls="false"
 				v-model.number="singleProduct.stocks"
 				@input="dataToParent"
-			></el-input
+			></el-input-number
 		></el-form-item>
 	</el-form>
 </template>
 <script setup>
 import { ref, defineEmits, defineProps } from 'vue';
-import { ElInput, ElForm, ElFormItem, ElButton } from 'element-plus';
+import { ElInput, ElForm, ElFormItem, ElButton,ElInputNumber } from 'element-plus';
 
 defineProps({
 	formRules: Object,

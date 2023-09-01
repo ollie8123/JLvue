@@ -2,12 +2,15 @@ import router from "../router/index";
 const url=`${import.meta.env.VITE_API_JAVAURL}`
 //引用原本的axios
 import axios from "axios";
-axios.defaults.baseURL = url;
-axios.defaults.withCredentials = true;
+// axios.defaults.baseURL = url;
+// axios.defaults.withCredentials = true;
 //改寫一個axios方法 自帶請求頭
 const CookieAxios = axios.create({
   baseURL:url,
 });
+
+// axios.defaults.baseURL = '';
+// axios.defaults.withCredentials = false;
 //改寫原本的axios請求
 CookieAxios.interceptors.request.use(
   (config) => {

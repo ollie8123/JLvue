@@ -55,10 +55,10 @@
 
 <script setup>
 import { reactive } from "vue";
-import { axios } from "../../service/api";
+import { axios,CookieAxios } from "../../service/api";
 import { useRouter } from "vue-router";
-import NomalNavBar from "../navbar/NomalNavBar.vue";
 import Swal from 'sweetalert2'
+
 
 const router = useRouter();
 const user = reactive({
@@ -69,10 +69,11 @@ const signIn = async () => {
   const params = new URLSearchParams();
   params.append("email", user.email);
   params.append("password", user.password);
-  axios
+  CookieAxios
     .post("/userLogin", params)
     .then((res) => {
       if (res.status == 200) {
+        
         Swal.fire({
   position: 'center',
   icon: 'success',
@@ -81,6 +82,11 @@ const signIn = async () => {
   timer: 1500
 })
         localStorage.setItem("loggedIn", true)
+        console.log('session storeage');
+        sessionStorage.setItem('username',user.email)
+        sessionStorage.setItem('password',user.password)
+        sessionStorage.setItem('loginStatus',true)
+
         router.push({ name: "HomePageView" });
       }
     })

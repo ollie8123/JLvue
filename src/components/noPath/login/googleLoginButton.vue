@@ -13,6 +13,7 @@ const callback = async (response) => {
 	}).then((rep) => {
 		if (rep.data == 1) {
 			alert('登入成功');
+			
 			localStorage.setItem('loggedIn', true);
 			window.location.reload();
 		} else {

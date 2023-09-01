@@ -51,6 +51,9 @@ const image = ref('../../../public/image/nolmg.png')
 const logout =  () => {
    CookieAxios.post("/logout").then(() => {
     localStorage.setItem("loggedIn", false)
+    sessionStorage.setItem("username",null)
+    sessionStorage.setItem("password",null)
+    sessionStorage.setItem("loginStatus",false)
   //判斷登出時的路徑
   if (route.path !== "/HomePageView") {
        router.push("/").then(() => location.reload());

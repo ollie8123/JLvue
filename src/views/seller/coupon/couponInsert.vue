@@ -38,8 +38,10 @@
           maxlength="5"
           show-word-limit
           @input="filterCode"
+          @blur="search"
           style="margin-right: 10px;"
         />
+        <small v-show="warn"  style="color: red;">該優惠碼已被使用</small>
            </li>
            <li>
             <label for="begin" class="form-label">優惠券開始時間: </label>
@@ -113,7 +115,7 @@
            </li>
            
           </section>
-          <el-button class="btnInsert" type="primary" @click="insert" >新增</el-button>
+          <el-button class="btnInsert" type="primary" @click="insert" :disabled="warn">新增</el-button>
         </ol>
           
    </fieldset>
@@ -167,14 +169,31 @@ const updateEndTime = () => {
 //     miniumSpendingAmount.value=""
 //     perPersonQuota.value=""
 // }
+const warn=ref(false);
 const clear = () => {
   discountAmount.value = "";
   miniumSpendingAmount.value = "";
   perPersonQuota.value = "";
   availableNumber.value="";
 };
+const search=async()=>{
+  const API_URL = `search`;
+  const response = await CookieAxios.get(API_URL, {
+    params: {
+      code: code.value
+    }
+  });
+  console.log("response.data.data");
+  console.log(response.data.data); 
+  if(response.data.data===true){
+    warn.value=true
 
+  }else{
+    warn.value=false
+  }
+}
 const insert = async () => {
+ 
   Swal.fire({
   title: '確定要新增嗎?',
   text: "部分內容可以之後再修改!",

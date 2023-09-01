@@ -1,7 +1,7 @@
 <template>
 <el-container v-if="sellerCouponList.length>0">      
-     <el-aside  style="padding: 10px; background-color: rgb(240, 240, 240); width: 20%">優惠券</el-aside>     
-        <el-main style="padding-top: 5px; background-color: rgb(247, 243, 238)">      
+     <el-aside  style="padding: 10px; background-color:#fafaec; width: 20%">優惠券</el-aside>     
+        <el-main style="padding-top: 5px; background-color: #fafaec">      
   <el-popover
     placement="bottom-start"
     title="優惠券列表"

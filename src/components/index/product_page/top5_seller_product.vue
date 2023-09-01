@@ -17,12 +17,12 @@
         <div style="padding: 14px">
             <el-row>
               <el-col :span="12">  <span>{{ productPage.name }}</span></el-col>
-              <el-col :span="12">   <span>{{ productPage.name }}</span></el-col>
+              <el-col :span="12">   <span>售出數:{{ productPage.sales }}</span></el-col>
             </el-row> 
           <div class="bottom">
             <el-row>
               <el-col v-if="productPage.minPrice!=productPage.maxPrice " :span="24"><span>${{ productPage.minPrice }} ~ ${{productPage.maxPrice}}</span></el-col>
-              <el-col v-else :span="24"> <span >${{ productPage.minPrice }}</span></el-col>
+              <el-col v-else :span="24"> <span >${{ productPage.minPrice }}</span> </el-col>
             </el-row> 
           </div>
         </div>

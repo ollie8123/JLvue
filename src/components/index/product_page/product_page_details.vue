@@ -1,6 +1,6 @@
 <template>
   <div>
-      <el-main style="background-color: rgb(242, 194, 132); margin-top: 5px">
+      <el-main style="background-color: #ebebd3; margin-top: 5px">
       <div>商品介紹</div>
       <div style="white-space: pre-line;">{{ details.productDescription}}</div>
       

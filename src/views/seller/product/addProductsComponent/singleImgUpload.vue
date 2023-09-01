@@ -1,8 +1,7 @@
 <template>
 	<transition-group name="img-container-fade">
 		<div
-			:key="img"
-			v-for="(img, imgNum) in imgs"
+			v-if="img"
 			class="img-container"
 		>
 			<img
@@ -13,120 +12,97 @@
 			/>
 			<div
 				class="img-delete-button"
-				@click="deleteImg(imgNum)"
-				@mouseover="setIconShow(imgNum, true)"
-				@mouseleave="setIconShow(imgNum, false)"
+				@click="deleteImg()"
+				@mouseover="setIconShow(true)"
+				@mouseleave="setIconShow(false)"
 			>
 				<transition name="fade">
 					<i
-						v-show="getDeleteIconState(imgNum)"
+						v-show="getDeleteIconState()"
 						class="bi bi-trash-fill delete-button-icon"
 					></i>
 				</transition>
 			</div>
 		</div>
+		<div
+			class="file-upload-block"
+			@click="pictureInput.click()"
+			v-if="!img"
+		>
+			<i class="bi bi-images picture-icon"></i>
+			<div class="d-flex flex-column-reverse m-1">
+				<span
+					class="alert-text"
+					v-if="wrongDataTypeCheck"
+				>
+					請勿輸入非圖片的檔案!!
+				</span>
+				<span
+					class="alert-text"
+					v-if="uploadLimitCheck"
+				>
+					請勿輸入五個以上的圖片!!
+				</span>
+			</div>
+			<input
+				type="file"
+				accept="image/*"
+				ref="pictureInput"
+				class="hidden-img-input"
+				@change="pictureSelected"
+			/>
+		</div>
 	</transition-group>
-
-	<div
-		class="file-upload-block"
-		@click="triggerInput"
-		v-show="imgCount < 5"
-	>
-		<i class="bi bi-images picture-icon"></i>
-
-		<span>新增圖片</span>
-		<span>({{ imgCount }}/5)</span>
-		<input
-			type="file"
-			accept="image/*"
-			multiple
-			ref="pictureInput"
-			class="hidden-img-input"
-			@change="pictureSelected"
-		/>
-	</div>
-	<div class="d-flex flex-column-reverse m-3">
-		<span
-			class="alert-text"
-			v-if="wrongDataTypeCheck"
-		>
-			請勿輸入非圖片的檔案!!
-		</span>
-		<span
-			class="alert-text"
-			v-if="uploadLimitCheck"
-		>
-			請勿輸入五個以上的圖片!!
-		</span>
-	</div>
 </template>
 <script setup>
-import { ref, watchEffect, onUpdated, defineEmits } from 'vue';
+import { ref, watch, defineEmits } from 'vue';
 
 const pictureInput = ref();
-const imgs = ref([]);
-const imgFiles = ref([]);
-const imgCount = ref(0);
+const img = ref();
+const imgFile = ref();
 const wrongDataTypeCheck = ref(false);
 const uploadLimitCheck = ref(false);
 const emit = defineEmits(['dataToParent']);
 
-watchEffect(() => {
-	imgCount.value = imgs.value.length;
+watch(imgFile, () => {
+	emit('dataToParent', imgFile.value);
 });
-
-onUpdated(() => {
-	emit('dataToParent', imgFiles.value);
-});
-
-const triggerInput = () => {
-	if (imgCount.value >= 5) {
-		return;
-	}
-	pictureInput.value.click();
-};
 
 const pictureSelected = (e) => {
 	wrongDataTypeCheck.value = false;
 	uploadLimitCheck.value = false;
-
-	const pictures = e.target.files;
-
-	if (imgCount.value + pictures.length > 5) {
+	const picture = e.target.files[0];
+	if (!img) {
 		uploadLimitCheck.value = true;
 		return;
 	}
-
-	for (let picture of pictures) {
-		if (!picture.type.includes('image')) {
-			wrongDataTypeCheck.value = true;
-			continue;
-		}
-		const reader = new FileReader();
-		reader.addEventListener('load', (e) => {
-			imgFiles.value.push(picture);
-			imgs.value.push(e.target.result);
-		});
-		reader.readAsDataURL(picture);
+	if (!picture.type.includes('image')) {
+		wrongDataTypeCheck.value = true;
+		return;
 	}
+	const reader = new FileReader();
+	reader.addEventListener('load', (e) => {
+		img.value = e.target.result;
+		imgFile.value = picture;
+	});
+	reader.readAsDataURL(picture);
 };
 
 // Interactive Function Block Start //
 
-const deleteIconStates = ref(Array(imgs.value.length).fill(false));
+const deleteIconStates = ref(false);
 
-const setIconShow = (imgNum, state) => {
-	deleteIconStates.value[imgNum] = state;
+const setIconShow = (state) => {
+	deleteIconStates.value = state;
 };
 
-const getDeleteIconState = (imgNum) => {
-	return deleteIconStates.value[imgNum];
+const getDeleteIconState = () => {
+	return deleteIconStates.value;
 };
 
-const deleteImg = (imgNum) => {
-	deleteIconStates.value.splice(imgNum, 1);
-	imgs.value.splice(imgNum, 1);
-	imgFiles.value.splice(imgNum, 1);
+const deleteImg = () => {
+	img.value = null;
+	imgFile.value = null;
 };
 </script>
 <style scoped>
@@ -235,6 +211,6 @@ span {
 
 .alert-text {
 	color: red;
-	font-size: 18px;
+	font-size: 10px;
 }
 </style>

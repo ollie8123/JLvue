@@ -1,7 +1,7 @@
 <template>
     <el-main
       style="
-        background-color: rgb(241, 167, 70);
+        background-color:#EBEBD3;
         margin: 5px 5px 0px 5px;
         height: auto;
       "

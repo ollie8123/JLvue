@@ -1,8 +1,7 @@
  <template>
-  <div class="common-layout" >
+  <div class="common-layout" :key="update" >
     <el-container>
-      <el-header class="Header"  v-if="productS.length>0">
-      </el-header>
+      <el-header class="Header">  </el-header>
       <el-container>
         <el-aside  class="Aside" >
            <el-select v-model="value" class="m-2" placeholder="Select" size="large">
@@ -103,7 +102,7 @@
                         disabled
                         size="small"
                       />
-           
+                      <span v-else>{{`暫無評價 `}}</span>
                       <span
                         v-if="product.sales > 0 && product.sales < 10000"
                         style="font-size: 14px"
@@ -120,9 +119,13 @@
             </el-row>
           </div>
         </el-main>
-        <el-main class="Main" v-else>
-          <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/a60759ad1dabe909c46a817ecbf71878.png">
-          <div>找不到結果</div>
+        <el-main class="Main" v-else style="display: flex; justify-content: center; align-items: center; height: 70vh;" >
+          <el-row>
+            <el-col :span="24"><img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/a60759ad1dabe909c46a817ecbf71878.png"></el-col>
+          </el-row>
+           <el-row>
+                 <el-col :span="24" style="font-size: 60px;" ><div>很抱歉，我們無法找到您的搜索結果。</div></el-col>
+          </el-row>
         </el-main>
       </el-container>
     <ElPagination
@@ -156,22 +159,26 @@ import {
   ElInput,
 } from "element-plus";
 import "element-plus/dist/index.css";
-import { axios } from "../../../service/api";
+import { CookieAxios } from "../../../service/api";
 import { onMounted, ref, watch,watchEffect  } from "vue";
 import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
 const router = useRouter();
 const props = defineProps(["keyword"]);
 const aa = () => { 
   return 3;
 }
 
-onMounted(async() => {
- await axios.get('/public/keywordSelectProductList?keyword=' + props.keyword).then((req) => {
+onMounted(async () => {
+  productS.value=['']
+
+ await CookieAxios.get('/public/keywordSelectProductList?keyword=' + props.keyword).then((req) => {
     categoryList.value=req.data.data.class
     productList.value=req.data.data.products.content
      totalElements.value=req.data.data.products.totalElements
      totalPagesize.value = req.data.data.products.pageSize
-   })
+ })
+
 })
 const productList = ref();
 const categoryList =ref();
@@ -278,7 +285,7 @@ const selectPath = async (page) => {
     path += "&page=0"
   }
    path += "&size=3"
-  await axios.get(path).then((req) => {
+  await CookieAxios.get(path).then((req) => {
 
     productS.value = req.data.data.products.content;
     totalElements.value=req.data.data.products.totalElements
@@ -287,32 +294,40 @@ const selectPath = async (page) => {
   });
 };
 
-const re=ref(0)
+const re = ref(0)
+const update=ref(0)
 const clean = async () => { 
   selectMinPrice.value=''
   selectMaxPrice.value=''
   evaluate.value = ''
   value.value='時間排序'
-  
+  update.value++;
  let path = "/public/keywordSelectProductList?keyword=" + props.keyword;
-await axios.get(path).then((req) => {
+await CookieAxios.get(path).then((req) => {
     productS.value = req.data.data.products.content;
     totalElements.value=req.data.data.products.totalElements
     totalPagesize.value = req.data.data.products.pageSize
   });
 }
+
+// const clean = async () => { 
+//   update.value++;
+// }
 </script>
 
 <style scoped>
+.swal2-popup {
+      height: 500px;
+ }
 .Header {
-  background-color: #EDF4FC;
+  background-color: #f5f5f5;
 }
 .Aside {
   width: 200px;
   background-color: #f5f5f5;
 }
 .Main {
-  background-color: #f1f6be;
+  background-color: #f5f5f5;
 }
 .price {
   font-size: 16px;

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-main style="background-color: rgb(236, 193, 193); margin-top: 5px">
-        <div style="font-size: 30px;">商品評價</div>
-         <el-card style="background-color: rgb(238, 230, 219);">
+    <el-main style="background-color: #ebebd3; margin-top: 5px">
+        <div style="font-size: 30px; font-weight: bold;">商品評價</div>
+         <el-card style="background-color: #fafaec;">
           <ElContainer>
            <el-aside style="width: 20%; display: flex; justify-content: center; align-items: center; flex-direction: column;">
                  <div ><span style="font-size: 25px;">{{reviewMsg.avg }}</span><span>/5</span></div>
@@ -21,7 +21,7 @@
     <div v-if="reviewList.length>0">
       <el-row v-for="review in reviewList" :key="review">
           <!-- 顯示資料 -->
-        <el-card  class="box-card" style="background-color: rgb(193, 230, 224);  margin-top: 10px;">
+        <el-card  class="box-card" style="background-color: #fafaec;  margin-top: 10px;">
           <ElContainer>
              <ElAside 
              style="padding: 10px; width: 80px; height: 80px;
@@ -46,7 +46,7 @@
      </div>
      <div v-else>
       <el-card  class="box-card" 
-      style="background-color: rgb(193, 230, 224);  
+      style="background-color: #fafaec;  
       margin-top: 10px ; 
       display: flex; 
       justify-content: center; 

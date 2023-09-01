@@ -44,7 +44,7 @@
 </template>
 <script setup>
 import { onMounted, ref, reactive } from 'vue';
-import { axios } from '../../service/api';
+import { axios, CookieAxios } from '../../service/api';
 import { useRouter } from 'vue-router';
 import {
 	ElButton,
@@ -59,8 +59,8 @@ const router = useRouter();
 const count = ref(0);
 const KindList = reactive([]);
 const buttonKind = (n) => {
-	alert(n);
-	router.push('/search_category');
+	// alert(n);
+	// router.push('/search_category');
 };
 
 
@@ -105,7 +105,7 @@ const imagePaths = [
 
 
 onMounted(async () => {
-	await axios.post('/public/select/MainProductCategory').then((req) => {
+	await CookieAxios.post('/public/select/MainProductCategory').then((req) => {
 		console.log(req.data.data[0]);
 		KindList.values = req.data.data;
 		count.value = Math.ceil(KindList.values.length / 16);

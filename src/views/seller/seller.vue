@@ -165,7 +165,7 @@
 							<li>
 								<router-link
 									class="dropdown-item"
-									to="/seller/coupon/insert"
+									to=""
 								>
 									優惠券圖表</router-link
 								>
@@ -245,7 +245,7 @@ import 'element-plus/theme-chalk/el-scrollbar.css';
 import 'element-plus/theme-chalk/el-button.css';
 import 'element-plus/theme-chalk/el-form.css';
 import 'element-plus/theme-chalk/el-form-item.css';
-
+import 'element-plus/theme-chalk/el-alert.css';
 import { RouterLink, RouterView } from 'vue-router';
 </script>
 

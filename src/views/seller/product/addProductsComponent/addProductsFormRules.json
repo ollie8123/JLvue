@@ -11,7 +11,7 @@
 	"category": [
 		{ "required": true, "message": "請選擇商品類別名稱", "trigger": "blur" }
 	],
-	"description": [
+	"productDescription": [
 		{ "max": 3000, "message": "商品說明上限為3000字", "trigger": "blur" },
 		{
 			"min": 30,

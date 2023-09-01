@@ -272,45 +272,43 @@
                     style="margin-top: 10px; width: 400px"
                     v-if="checkboxGroup1[0] == '信用卡'"
                   >
-                  <div v-if="userCreditCard.length>0">
-                    <div v-for="userCard in userCreditCard" :key="userCard">
-                      <el-card style="margin-top: 10px">
-                        <el-row>
-                          <el-col :span="3">
-                            <el-checkbox-group
-                              v-model="creditCard"
-                              size="large"
+                    <div v-if="userCreditCard.length > 0">
+                      <div v-for="userCard in userCreditCard" :key="userCard">
+                        <el-card style="margin-top: 10px">
+                          <el-row>
+                            <el-col :span="3">
+                              <el-checkbox-group
+                                v-model="creditCard"
+                                size="large"
+                              >
+                                <el-checkbox :label="userCard.cardId">
+                                  {{}}
+                                </el-checkbox>
+                              </el-checkbox-group>
+                            </el-col>
+                            <el-col :span="6">
+                              <img
+                                style="width: 60px; height: auto"
+                                src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/9f6f1831fb61c65952c4cdb1189d7cb8.png"
+                              />
+                            </el-col>
+                            <el-col
+                              :span="12"
+                              style="
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                              "
                             >
-                              <el-checkbox :label="userCard.cardId">
-                                {{}}
-                              </el-checkbox>
-                            </el-checkbox-group>
-                          </el-col>
-                          <el-col :span="6">
-                            <img
-                              style="width: 60px; height: auto"
-                              src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/9f6f1831fb61c65952c4cdb1189d7cb8.png"
-                            />
-                          </el-col>
-                          <el-col
-                            :span="12"
-                            style="
-                              display: flex;
-                              align-items: center;
-                              justify-content: center;
-                            "
-                          >
-                            {{ userCard.cardNumber }}</el-col
-                          >
-                        </el-row>
-                      </el-card>
+                              {{ userCard.cardNumber }}</el-col
+                            >
+                          </el-row>
+                        </el-card>
+                      </div>
                     </div>
-                  </div>
-                  <div v-else >
-                    <el-card>
-                      未添加信用卡資料
-                    </el-card>
-                  </div>
+                    <div v-else>
+                      <el-card> 未添加信用卡資料 </el-card>
+                    </div>
                   </el-card>
                 </el-col>
                 <el-col :span="17"></el-col>
@@ -357,11 +355,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, reactive } from "vue";
+import { ref, onMounted, watch, reactive, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { CookieAxios } from "../../../service/api";
-import { infoMsgTimer,successMsgTimer } from "../../../service/sweetalert2";
+import { infoMsgTimer, successMsgTimer } from "../../../service/sweetalert2";
+import Swal from "sweetalert2";
 const checkboxGroup1 = ref([]);
 const types = ["信用卡", "貨到付款"];
 watch(checkboxGroup1, () => {
@@ -423,13 +422,13 @@ watch(
 const isDefaultAddress = ref();
 const dialogs = ref([]);
 onMounted(async () => {
-
   if (cartIds.length > 0) {
     const res = await CookieAxios.post("/checkOutGet", { cartIds });
     if (res.data.code == 1) {
       recipientAddress.value = res.data.data.recipientAddress;
       sellerMsg.value = res.data.data.sellerMsg;
       userCreditCard.value = res.data.data.userCreditCard;
+      //判斷沒地址 
       for (let i = 0; i < res.data.data.recipientAddress.length; i++) {
         if (res.data.data.recipientAddress[i].type == "Normal") {
           if (res.data.data.recipientAddress[i].isDefault == true) {
@@ -440,13 +439,17 @@ onMounted(async () => {
       }
       resMsg.value = sellerMsg.value.map((seller) => ({
         sellerId: seller.sellerId,
-        productList: seller.productList.map((product) => [product.cartId, product.cartProductQuantity]),
+        productList: seller.productList.map((product) => [
+          product.cartId,
+          product.cartProductQuantity,
+        ]),
         address: [isDefaultAddress.value],
         type: false,
         creditCard: [],
         couponId: userCouponSelect(seller.sellerId),
       }));
       dialogs.value = Array(sellerMsg.value.length).fill(false);
+      
     } else {
       router.push("/");
     }
@@ -538,49 +541,77 @@ const allTotal = () => {
 };
 //購買
 const buy = async () => {
-  if (resMsg.value.length<1) { 
-    router.push('/')
-    return
-  }
-  if (checkboxGroup1.value[0] == undefined) { 
-    infoMsgTimer('請選擇付款方式', 1500)
+  if (resMsg.value.length < 1) {
+    router.push("/");
     return;
   }
-  if (checkboxGroup1.value[0] == '信用卡') { 
+  if (checkboxGroup1.value[0] == undefined) {
+    infoMsgTimer("請選擇付款方式", 1500);
+    return;
+  }
+  if (checkboxGroup1.value[0] == "信用卡") {
     if (creditCard.value[0] != undefined) {
-        const buyMsg = {
+      const buyMsg = {
         sellerOrderList: resMsg.value,
         paymentMethod: checkboxGroup1.value[0],
-        card:creditCard.value[0]
-        };
-      const res = await CookieAxios.post('/generateOrders', buyMsg)
-      console.log(res);
-       if (res.data.code == 1) { 
-         successMsgTimer('下單成功', 2000),
-         router.push('/')
-      } 
-      return;
-    } else { 
-        infoMsgTimer('請選擇信用卡', 1500)
+        card: creditCard.value[0],
+      };
+      Swal.fire({
+    title: '訂單生成中',
+    allowOutsideClick: false,
+    showConfirmButton: false,
+    didOpen: () => {
+        Swal.showLoading();
+    }
+    });  
+    const res = await CookieAxios.post("/generateOrders", buyMsg);
+    Swal.close();
+
+    if (res.data.code == 1) {
+      successMsgTimer("下單成功", 2000);
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
+    } else {
+      infoMsgTimer(res.data.msg, 2000);
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
+    }
+    } else {
+      infoMsgTimer("請選擇信用卡", 1500);
     }
   }
 
-  if (checkboxGroup1.value[0] == '貨到付款') { 
+  if (checkboxGroup1.value[0] == "貨到付款") {
     const buyMsg = {
-        sellerOrderList: resMsg.value,
-        paymentMethod: checkboxGroup1.value[0],
-        card:0
+      sellerOrderList: resMsg.value,
+      paymentMethod: checkboxGroup1.value[0],
+      card: 0,
     };
-    const res = await CookieAxios.post('/generateOrders', buyMsg)
-    console.log(res);
-    if (res.data.code == 1) { 
-      successMsgTimer('下單成功', 2000)
-      router.push('/')
+    Swal.fire({
+    title: '訂單生成中',
+    allowOutsideClick: false,
+    showConfirmButton: false,
+    didOpen: () => {
+        Swal.showLoading();
     }
+    });  
+    const res = await CookieAxios.post("/generateOrders", buyMsg);
+    Swal.close();
 
-    return;
+    if (res.data.code == 1) {
+      successMsgTimer("下單成功", 2000);
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
+    } else {
+      infoMsgTimer(res.data.msg, 2000);
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
+    }
   }
-
 };
 </script>
 

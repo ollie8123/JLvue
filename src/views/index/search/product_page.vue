@@ -10,7 +10,7 @@
           <product_page_review  :ProductPageId="productPageId"></product_page_review>
         </el-aside>
         <el-main  style="padding: 0px 20px 0px 20px">
-          <el-main style="background-color: rgb(242, 194, 132); margin-top: 5px">
+          <el-main style="background-color: #EBEBD3;; margin-top: 5px">
             <top5_seller_product  :top5List="top5List" :span=24></top5_seller_product>
           </el-main>
         </el-main>

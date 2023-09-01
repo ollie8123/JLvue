@@ -23,7 +23,7 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-import { axios } from "../../service/api";
+import { CookieAxios } from "../../service/api";
 import { ElAutocomplete } from "element-plus";
 import { useRouter } from "vue-router";
 import "element-plus/dist/index.css";
@@ -73,8 +73,8 @@ const links = ref<LinkItem[]>([]);
 const querySearchAsync = (queryString: string, cb: (arg: any) => void) => {
   var results;
   if (queryString.length > 0) {
-    queryString = queryString.replace(/\s/g, '');
-    axios
+    // queryString = queryString.replace(/\s/g, '');
+    CookieAxios
       .post("/public/productsSelect", {
         select: queryString,
       })

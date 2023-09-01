@@ -1,6 +1,12 @@
 <template>
   <div class="container">
     <div class="flex">
+      <chatroom></chatroom>
+       <!-- <RouterLink
+            class="btn btn-secondary me-3"
+            :to="'../../seller/chat'"
+            ><i class="bi bi-pencil-fill"></i> 聊天</RouterLink> -->
+      
     <span>總共 {{total}} 筆資料</span>
     <span class="col-3"><PageSize @pageSizeChange="changeHandler"></PageSize></span>
 
@@ -43,7 +49,7 @@
           {{ coupon.discountAmount }}元
         </td>
         <td v-if="coupon.discountRate != null && coupon.discountRate != ''">
-          {{ coupon.discountRate*100 }}折
+          {{ coupon.discountRate*10 }}折
           <br>
           <small>(最高折 {{ coupon.discountMaximum }}元)</small>
            
@@ -61,7 +67,9 @@
   </table>
   <Paging :totalPages="totalPages" :thePage="datas.start + 1" @childClick="clickHandler"></Paging>
   
-  <!-- singleCoupon.name.is?'':singleCoupon.name -->
+  
+  <!-- more -->
+
   <el-dialog v-model="dialogTableVisible" width="600px" center >
     <fieldset>
    <header >{{singleCoupon.name}}</header>
@@ -69,7 +77,7 @@
          <ol>
            <li>
              <label for="name">優惠券代碼:</label>
-             <input id="name" name="name" type="text" class="fildform" v-model="singleCoupon.code"/>
+             <input id="name" name="name" type="text" class="fildform" v-model="singleCoupon.code" disabled/>
            </li>
            <li>
              <label for="email">開始時間:</label>
@@ -79,6 +87,8 @@
           :min="currentTime"
           v-model="singleCoupon.startTime"
           @change="updateEndTime"
+          :max="maxStarttime"
+          style="width: 199px;"
         />
            </li>
            <li>
@@ -86,44 +96,49 @@
              <input
           type="datetime-local"
           id="end"
-          :min="startTimeOneHourLater"
+          :min="minEndtime"
           v-model="singleCoupon.endTime"
           
         />
            </li>
-           <div v-if="singleCoupon.discountAmount!=null&&singleCoupon.discountAmount!=''">
+           <!-- v-if="singleCoupon.discountAmount!=null&&singleCoupon.discountAmount!=''" -->
+           <div v-if="discountContent==1">
              <li>
                <label for="phone">折扣內容:</label>
-               <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.discountAmount"/>
+               <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.discountAmount" :disabled="singleCoupon.received!==0"/>
              </li>
            </div>
-           
-           <div v-if="singleCoupon.discountRate!=null&&singleCoupon.discountRate!=''">
+           <!-- v-if="singleCoupon.discountRate!=null&&singleCoupon.discountRate!=''" -->
+           <div v-if="discountContent==2">
             <li>
                 <label for="phone">折扣內容:</label>
-                <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.discountRate"/>
+                <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.discountRate" :disabled="singleCoupon.received!==0"/>
             </li>
             <li>
                 <label for="phone">最高折抵金額:</label>
-                <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.discountMaximum"/>
+                <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.discountMaximum" :disabled="singleCoupon.received!==0"/>
             </li>
 
            </div>
            <li>
-             <label for="phone">最低消費:</label>
+             <label for="">最低消費:</label>
              <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.miniumSpendingAmount"/>
            </li>
            <li>
-             <label for="phone">每人配額:</label>
-             <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.perPersonQuota"/>
+             <label for="">每人配額:</label>
+             <input id="" name="" type="text" class="fildform" v-model="singleCoupon.perPersonQuota" :disabled="singleCoupon.received!==0"/>
            </li>
            <li>
-             <label for="phone">已領取數:</label>
-             <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.received"/>
+             <label for="">已領取數:</label>
+             <input id="" name="" type="text" class="fildform" v-model="singleCoupon.received " disabled/>
            </li>
            <li>
              <label for="phone">已使用數:</label>
-             <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.used"/>
+             <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.used" disabled/>
+           </li>
+           <li>
+             <label for="phone">使用率:</label>
+             <input id="phone" name="phone" type="text" class="fildform" v-model="rate" disabled/>
            </li>
            <li>
              <label for="phone">剩餘可使用數量:</label>
@@ -131,7 +146,7 @@
            </li>
            <li>
              <label for="phone">建立時間:</label>
-             <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.dataCreateTime"/>
+             <input id="phone" name="phone" type="text" class="fildform" v-model="singleCoupon.dataCreateTime" disabled/>
            </li>
            <div v-if="status!=2" class="bttn">
            
@@ -167,6 +182,12 @@ import { CookieAxios } from "../../../service/api";
 import PageSize from '../../../components/page/PageSize.vue'
 import Paging from '../../../components/page/Paging.vue'
 import Swal from 'sweetalert2'
+import chatroom from'../../chat/chatRoom.vue'
+
+
+const discountContent=ref()
+const maxStarttime=ref()
+const minEndtime=ref()
 const coupons = ref([]);
 const totalPages = ref(0);
 const datas = reactive({
@@ -176,6 +197,7 @@ const datas = reactive({
 const status=ref(1)
 const total=ref()
 const dialogTableVisible = ref(false)
+const rate=ref(0)
 
 const loadValidity = async () => {
   const API_URL = `findValidity`;
@@ -238,7 +260,20 @@ const singleCoupon =ref({})
   singleCoupon.value.endTime=dayjs(singleCoupon.value.endTime).format("YYYY-MM-DD HH:mm")
   singleCoupon.value.dataUpdateTime=dayjs(singleCoupon.value.dataUpdateTime).format("YYYY-MM-DD HH:mm")
   singleCoupon.value.dataCreateTime=dayjs(singleCoupon.value.dataCreateTime).format("YYYY-MM-DD HH:mm")
-  
+  if(singleCoupon.value.used!=0&&singleCoupon.value.received!=0){
+    rate.value=parseFloat((singleCoupon.value.used/singleCoupon.value.received).toFixed(2))
+
+  }
+  if(singleCoupon.value.received==0){
+    maxStarttime.value=singleCoupon.value.startTime;
+    minEndtime.value=singleCoupon.value.endTime;
+
+  }
+  if(singleCoupon.value.discountAmount!=null&&singleCoupon.value.discountAmount!=''){
+    discountContent.value=1
+  }else if(singleCoupon.value.discountRate!=null&&singleCoupon.value.discountRate!=''){
+    discountContent.value=2
+  }
 
 //   if(coupons.value.discountRate!=null&&coupons.value.discountRate!=''){
 //      discount.value='ratio'
@@ -288,22 +323,27 @@ const changeHandler = value => {
 
 const deleteCoupon =async (couponId)=>{
 
-  if(window.confirm("真的要刪除嗎?")){
+  Swal.fire({
+  title: '確定要刪除嗎?',
+  // text: "部分內容可以之後再修改!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: '確認',
+  cancelButtonText: '取消'
 
-    const API_URL=`deleteById/${couponId}`
-    const response= await CookieAxios.delete(API_URL);
-    if(response.data.code===1){
-      alert("刪除成功")
-      if(status.value===1){
-      loadValidity()
-    }else if(status.value===2){
-      loadExpired()
-    }else if(status.value===3){
-      loadNoVailbleNumber()
-    }
-    }
-    else{
-    alert("刪除失敗")
+}).then(async(result) => {
+  if (result.isConfirmed) {
+   const API_URL=`deleteById/${couponId}`
+   const response= await CookieAxios.delete(API_URL);
+  
+  if (response.data.code === 1) {
+    Swal.fire(
+      '刪除成功!',
+      '',
+      'success'
+    )
     if(status.value===1){
       loadValidity()
     }else if(status.value===2){
@@ -311,8 +351,51 @@ const deleteCoupon =async (couponId)=>{
     }else if(status.value===3){
       loadNoVailbleNumber()
     }
+    dialogTableVisible.value=false
+    
+  } else {
+    Swal.fire(
+      '刪除失敗!',
+      '請重新嘗試',
+      'error'
+    )
+    if(status.value===1){
+      loadValidity()
+    }else if(status.value===2){
+      loadExpired()
+    }else if(status.value===3){
+      loadNoVailbleNumber()
     }
+    dialogTableVisible.value=false
   }
+  }
+})
+
+  // if(window.confirm("真的要刪除嗎?")){
+
+  //   const API_URL=`deleteById/${couponId}`
+  //   const response= await CookieAxios.delete(API_URL);
+  //   if(response.data.code===1){
+  //     alert("刪除成功")
+  //     if(status.value===1){
+  //     loadValidity()
+  //   }else if(status.value===2){
+  //     loadExpired()
+  //   }else if(status.value===3){
+  //     loadNoVailbleNumber()
+  //   }
+  //   }
+  //   else{
+  //   alert("刪除失敗")
+  //   if(status.value===1){
+  //     loadValidity()
+  //   }else if(status.value===2){
+  //     loadExpired()
+  //   }else if(status.value===3){
+  //     loadNoVailbleNumber()
+  //   }
+  //   }
+  // }
   
 }
 const edit = async () => {

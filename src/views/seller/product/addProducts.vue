@@ -42,12 +42,12 @@
 									@data-to-parent="settingCategoryDataFromChild"
 							/></el-form-item>
 							<el-form-item
-								prop="description"
+								prop="productDescription"
 								label="商品描述"
 								><el-input
 									type="textarea"
 									rows="8"
-									:maxlength="formRules.description[0].max"
+									:maxlength="formRules.productDescription[0].max"
 									show-word-limit
 									v-model="unsubmitProductPageData.productDescription"
 								/>
@@ -74,6 +74,7 @@
 							:formRules="formRules"
 							@data-to-parent="settingSpecificationProductFromChild"
 							@change-to-single-product-mode="changeShowingBlock"
+							@spec-imgs-to-parent="settingSpecImgsFromChild"
 						/>
 					</div>
 				</section>
@@ -141,7 +142,13 @@ import uploadFootBar from './addProductsComponent/uploadFootBar.vue';
 import singleProductSettingBlock from './addProductsComponent/singleProductSettingBlock.vue';
 import specificationProductBlock from './addProductsComponent/specificationProductBlock.vue';
 
-import { ElInput, ElForm, ElFormItem, ElScrollbar } from 'element-plus';
+import {
+	ElInput,
+	ElForm,
+	ElFormItem,
+	ElScrollbar,
+	ElLoading,
+} from 'element-plus';
 const productManageAPIUrl = `${import.meta.env.VITE_API_JAVAURL}productManage`;
 
 const formRules = ref(formRulesData);
@@ -166,16 +173,29 @@ const settingImgsDataFromChild = (imgs) => {
 	unsubmitProductPagePhotos.value = imgs;
 };
 
-const unssubmitProducts = ref([]);
+const unsubmitProducts = ref([]);
 
 const settingSingleProductFromChild = (data) => {
-	unssubmitProducts.value[0] = data;
+	unsubmitProducts.value[0] = data;
 };
 
 const settingSpecificationProductFromChild = (data) => {
-	console.log(data);
+	unsubmitProductPageData.value.mainSpecificationClassOptions =
+		data.mainSpecificationClassOptions;
+	unsubmitProductPageData.value.secondSpecificationClassOptions =
+		data.secondSpecificationClassOptions;
+	unsubmitProducts.value = data.products;
 };
-
+const unsubmitSpecPhotos = ref([]);
+const settingSpecImgsFromChild = (imgsFile) => {
+	let imgList = [];
+	for (let data of imgsFile) {
+		if (data.img instanceof File) {
+			imgList.push(data.img);
+		}
+	}
+	unsubmitSpecPhotos.value = imgList;
+};
 const blockShowSetting = ref({
 	singleProductBlock: true,
 	specificationProductBlock: false,
@@ -183,6 +203,7 @@ const blockShowSetting = ref({
 
 const changeShowingBlock = (showMode) => {
 	if (showMode === 'specification-mode') {
+		unsubmitSpecPhotos.value = [];
 		blockShowSetting.value.singleProductBlock = false;
 		blockShowSetting.value.specificationProductBlock = true;
 	}
@@ -191,13 +212,24 @@ const changeShowingBlock = (showMode) => {
 		blockShowSetting.value.specificationProductBlock = false;
 	}
 };
+const delay = (ms) => {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+};
 
 const submitProductPageData = async (productPageStatus) => {
+	const loading = ElLoading.service({
+		lock: true,
+		text: '正在建立商品頁面',
+		background: 'rgba(0, 0, 0, 0.7)',
+	});
 	try {
 		const pageId = await uploadProductPageData(unsubmitProductPageData.value);
-		await uploadProducts(unssubmitProducts.value, pageId);
+		await uploadProducts(unsubmitProducts.value, pageId);
 		await uploadProductPagePhotos(unsubmitProductPagePhotos.value, pageId);
+		await uploadSpecPhotos(unsubmitSpecPhotos.value, pageId);
 		await pageCreateDone(pageId, productPageStatus);
+		await delay(500);
+		loading.close();
 	} catch (error) {
 		console.error(error);
 	}
@@ -213,6 +245,7 @@ const uploadProductPageData = async (pageData) => {
 };
 
 const uploadProducts = async (products, pageId) => {
+	console.log(products);
 	const response = await CookieAxios({
 		method: 'POST',
 		url: productManageAPIUrl + '/uploadProducts',
@@ -250,6 +283,28 @@ const uploadProductPagePhotos = async (photos, pageId) => {
 		},
 		method: 'POST',
 		url: productManageAPIUrl + '/uploadProductPagePhotos',
+		data: formData,
+		params: {
+			pageId: pageId,
+		},
+	});
+	return response.data.msg;
+};
+
+const uploadSpecPhotos = async (photos, pageId) => {
+	if (photos.length === 0) {
+		return 'noSpecPhoto';
+	}
+	const formData = new FormData();
+	for (let data of photos) {
+		formData.append('productSpecImgs', data);
+	}
+	const response = await CookieAxios({
+		headers: {
+			'Content-Type': 'multipart/form-data',
+		},
+		method: 'POST',
+		url: productManageAPIUrl + '/uploadSpecPhotos',
 		data: formData,
 		params: {
 			pageId: pageId,

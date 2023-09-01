@@ -1,13 +1,16 @@
 <template>
+    <NomalNavBarVue></NomalNavBarVue>
     <div class="container">
         <checkout></checkout>
     </div>
+    <Footer></Footer>
 </template>
 
 <script setup>
 import navbar from "../../../components/navbar/navbar.vue";
 import checkout from "../../../components/noPath/checkout/checkout.vue";
-
+import NomalNavBarVue from "../../../components/navbar/NomalNavBar.vue";
+import Footer from "../../../components/noPath/footer/Footer.vue";
 </script>
 
 <style scoped>

@@ -15,7 +15,7 @@
         <a 
             v-for="item in vvvv" 
             :key="item.id" 
-            :href="item.url">
+          >
             {{ item.name }}
         </a>
   
@@ -28,7 +28,7 @@
     
 <script setup lang="ts">
 import { ref } from "vue";
-import { axios } from "../../service/api";
+import { CookieAxios } from "../../service/api";
 import { ElAutocomplete } from "element-plus";
 import { useRouter } from "vue-router";
 const router = useRouter();
@@ -81,7 +81,7 @@ const querySearchAsync = (queryString: string, cb: (arg: any) => void) => {
   var results;
   if (queryString.length > 0) {
     queryString = queryString.replace(/\s/g, '');
-    axios
+    CookieAxios
       .post("/public/productsSelect", {
         select: queryString,
       })

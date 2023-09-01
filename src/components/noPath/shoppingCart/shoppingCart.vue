@@ -13,46 +13,46 @@
       <div v-if="store.getters.Cart.length > 0">
         <el-card
           :body-style="{ padding: '10px' }"
-          style="background-color: rgb(245, 245, 245); width: 100%"
+          style="background-color: rgb(255, 255, 255); width: 100%"
         >
           <el-card
             :body-style="{ padding: '10px' }"
-            style="background-color: rgb(245, 245, 245); width: 100%"
+            style="background-color: rgb(255, 255, 255); width: 100%"
           >
             <ElContainer>
               <ElMain style="width: 5%"> </ElMain>
               <ElMain
-                style="width: 10%; background-color: #c7edcb"
+                style="width: 10%; background-color: #ffffff"
                 class="main"
               >
                 <span class="truncate">圖片</span>
               </ElMain>
               <ElMain
-                style="width: 30%; background-color: #ed9898"
+                style="width: 30%; background-color: #ffffff"
                 class="main"
               >
                 <span class="truncate">名稱</span>
               </ElMain>
               <ElMain
-                style="width: 20%; background-color: #c7edcb"
+                style="width: 20%; background-color: #ffffff"
                 class="main"
               >
                 <span class="truncate">規格</span>
               </ElMain>
               <ElMain
-                style="width: 10%; background-color: #ebed98"
+                style="width: 10%; background-color: #ffffff"
                 class="main"
               >
                 <span class="truncate">價錢</span>
               </ElMain>
               <ElMain
                 class="main"
-                style="width: 10%; background-color: #98edcf"
+                style="width: 10%; background-color: #ffffff"
               >
                 <span class="truncate">數量</span>
               </ElMain>
               <ElMain
-                style="width: 10%; background-color: #a798ed"
+                style="width: 10%; background-color: #ffffff"
                 class="main"
               >
                 <span class="truncate">總計</span>
@@ -118,13 +118,13 @@
                       />
                     </ElMain>
                     <ElMain
-                      style="width: 30%; background-color: #ed9898"
+                      style="width: 30%; background-color: #f5f5f5"
                       class="main"
                     >
                       <span class="truncate">{{ msg.productName }}</span>
                     </ElMain>
                     <ElMain
-                      style="width: 20%; background-color: #c7edcb"
+                      style="width: 20%; background-color: #f5f5f5"
                       class="main"
                     >
                       <span
@@ -139,7 +139,7 @@
                       >
                     </ElMain>
                     <ElMain
-                      style="width: 10%; background-color: #ebed98"
+                      style="width: 10%; background-color: #f5f5f5"
                       class="main"
                     >
                       <span class="truncate">{{
@@ -147,7 +147,7 @@
                       }}</span>
                     </ElMain>
                     <ElMain
-                      style="width: 10%; background-color: #98edcf"
+                      style="width: 10%; background-color: #f5f5f5"
                       class="main"
                     >
                       <el-input-number
@@ -158,7 +158,7 @@
                       />
                     </ElMain>
                     <ElMain
-                      style="width: 10%; background-color: #a798ed"
+                      style="width: 10%; background-color: #f5f5f5"
                       class="main"
                     >
                       <span class="truncate">{{
@@ -186,14 +186,8 @@
                    v-else-if="msg.stocksType=='emptyStocks'"
                 >  
                   <ElContainer style="background-color: rgb(245, 245, 245)">
-                    <ElMain style="width: 5%">
-                      <el-checkbox-group v-model="selectedProducts">
-                        <el-checkbox
-                          disabled
-                          :label="msg"
-                          size="large"
-                          >{{ }}</el-checkbox>
-                      </el-checkbox-group>
+                    <ElMain style="width: 5%; padding: 20px 0px 20px 0px;">
+                     <el-button    disabled style="width: 100%;color: #f80707;">無庫存</el-button>
                     </ElMain>
                   
                     <ElMain
@@ -205,6 +199,7 @@
                       "
                       class="main"
                     >
+                    
                       <img
                         style="
                           max-width: 100%;
@@ -216,13 +211,13 @@
                       />
                     </ElMain>
                     <ElMain
-                      style="width: 30%; background-color: #ed9898"
+                      style="width: 30%; background-color: #f5f5f5"
                       class="main"
                     >
                       <span class="truncate">{{ msg.productName }}</span>
                     </ElMain>
                     <ElMain
-                      style="width: 20%; background-color: #c7edcb"
+                      style="width: 20%; background-color: #f5f5f5"
                       class="main"
                     >
                       <span
@@ -237,7 +232,7 @@
                       >
                     </ElMain>
                     <ElMain
-                      style="width: 10%; background-color: #ebed98"
+                      style="width: 10%; background-color: #f5f5f5"
                       class="main"
                     >
                       <span class="truncate">{{
@@ -245,7 +240,7 @@
                       }}</span>
                     </ElMain>
                     <ElMain
-                      style="width: 10%; background-color: #98edcf"
+                      style="width: 10%; background-color: #f5f5f5"
                       class="main"
                     >
                       <el-input-number
@@ -256,7 +251,7 @@
                       />
                     </ElMain>
                     <ElMain
-                      style="width: 10%; background-color: #a798ed"
+                      style="width: 10%; background-color: #f5f5f5"
                       class="main"
                     >
                       <span class="truncate">{{
@@ -271,10 +266,8 @@
                       >
                     </ElMain>
                   </ElContainer>
-                  <div>暫無庫存</div>
+        
                 </el-card>
-
-
               </el-row>
 
 
@@ -446,8 +439,16 @@ const checkout = async() => {
     check.push({id:selectedProducts.value[i].cartId,count:selectedProducts.value[i].productCount})
     }
   const res = await CookieAxios.post('/shoppingCartCheckAvailability', check)
-   console.log(res.data)
    //判斷庫存量
+    if (res.data.code == 0 && res.data.msg == '請先填寫地址') { 
+      console.log('進入')
+      infoMsgTimer("請先填寫地址", 2000);
+      setTimeout(() => {
+        router.push("/user/account/address");
+      }, 500);
+      return
+    }
+
     if (res.data.code == 1) {
       store.dispatch("getCheckoutProductList", { checkoutProductList: checkoutProductList});
       store.dispatch("getCheckoutCouponList", { checkoutCouponList: checkoutCouponList });
@@ -468,11 +469,14 @@ const checkout = async() => {
 const selectAll = ref(false);
 //點擊全選按鈕事件
 const toggleSelectAll = () => {
-  if (selectAll.value) {
+
+      if (selectAll.value) {
     // 當全選時，將所有商品添加到 selectedProducts 中
-    selectedProducts.value = store.state.Cart.flatMap((c) => c.productMsg);
+    selectedProducts.value = store.state.Cart.flatMap((c) => 
+      c.productMsg.filter(msg => msg.stocksType !== 'emptyStocks')
+    );
   } else {
-    // 當取消全選時，清空 selectedProducts
+      // 當取消全選時，清空 selectedProducts
     selectedProducts.value = [];
   }
 };

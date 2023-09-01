@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { axios } from "../service/api";
+import { CookieAxios } from "../service/api";
 
 export default {
   data() {
@@ -86,7 +86,7 @@ export default {
     querySearch(queryString, cb) {
       var results;
       if (this.input.length > 0) {
-        axios
+        CookieAxios
           .post("/public/productsSelect", {
             select: queryString,
           })

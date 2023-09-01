@@ -1,6 +1,6 @@
 <template>
     <div>
-         <el-main style="background-color: rgb(242, 194, 132);padding:10px">
+         <el-main style="background-color: #ebebd3;padding:10px">
           <el-container >
             <ElMain style="padding: 0px 20px;">
                 <ElContainer>
