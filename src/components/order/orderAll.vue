@@ -18,7 +18,7 @@
 <div v-for="product in order.products" :key="product.productId" class="productArea">
 <div class="d-flex justify-content-between align-items-center mt-1 mb-1" @click="selectProduct(product.productName, product.productPageId)" >
     <div class="d-flex">
-    <div class="imgDiv"><img :src="`data:image/*;base64,${product.productImg}`" alt="" class="imgSize"></div>
+    <div class="imgDiv"><img :src="`data:image/*;base64,${product.productImg}`" alt="" class="imgSize productImg"></div>
     <div class="d-flex flex-column productInfo">
         <div class="fw-bold">{{product.productName}}</div>
         <div>數量：{{product.productQuantity}}</div>
@@ -82,7 +82,8 @@ onMounted(async () => {
 <style scoped>
 
 .imgDiv{
-
+    height: 210px;
+    width: 240px;
     margin-right: 10px;
 }
 
@@ -157,5 +158,12 @@ height: 150px;
 .aTag{
     margin-left: 10px;
     margin-right: 10px;
+}
+
+
+.productImg{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 </style>

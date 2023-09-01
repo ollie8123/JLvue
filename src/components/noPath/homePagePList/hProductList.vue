@@ -100,9 +100,9 @@ onMounted(async () => {
 }
 
 .productImg{
-    width: 150px;
-    height: 210px;
-    
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .photoDiv{
@@ -110,7 +110,8 @@ onMounted(async () => {
     justify-content: center;
     align-items: center;
     height: 210px;
-    width: 250px;
+    width: 240px;
+    padding-right: 15px;
    
 }
 
